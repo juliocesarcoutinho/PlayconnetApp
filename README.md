@@ -23,17 +23,20 @@ Bem-vindo ao **App Playconnect**, um aplicativo desenvolvido para adolescentes, 
 ## 🛠️ Tecnologias Utilizadas
 
 ### **Frontend**
+
 - [React Native](https://reactnative.dev/) com [Expo](https://expo.dev/)
 - [React Navigation](https://reactnavigation.org/) para gerenciamento de rotas
 - Design moderno com **StyleSheet** e integração de imagens de fundo
 
 ### **Backend**
+
 - [Spring Boot](https://spring.io/projects/spring-boot) (em desenvolvimento)
   - APIs REST para comunicação com o app
   - WebSocket para chat em tempo real
 - Banco de Dados: **MySQL** ou **PostgreSQL**
 
 ### **Outros Recursos**
+
 - **Firebase Authentication** (em planejamento)
 - **Firebase Cloud Messaging (FCM)** para notificações push
 
@@ -47,12 +50,54 @@ Bem-vindo ao **App Playconnect**, um aplicativo desenvolvido para adolescentes, 
 - Expo CLI instalado globalmente:
   ```bash
   npm install -g expo-cli
+  ```
 
-## Como executar o projeto
+## Clone o repositório
+
 - git clone https://github.com/juliocesarcoutinho/playconnectApp.git
 - cd playconnectApp
 
 ## Instale as depêndencias
-```bash
-  npm install
 
+- Usando o npm instale as depêndencias com o comando abaixo
+  ```bash
+  npm install
+  ```
+
+## 📂 Estrutura de Pastas
+
+```plaintext
+playconnectApp/
+├── assets/            # Imagens, fontes e outros recursos visuais
+├── components/        # Componentes reutilizáveis
+├── screens/           # Telas principais (Login, Cadastro, etc.)
+├── services/          # Configuração de APIs e lógica de backend
+├── App.js             # Arquivo principal do aplicativo
+└── README.md          # Documentação do projeto
+```
+
+🌟 Contribuindo
+
+- Contribuições são muito bem-vindas! Para contribuir:
+
+1.  Faça um fork do projeto
+2.  Crie um branch para sua feature:
+
+```bash
+git checkout -b minha-feature
+```
+
+3. Commite suas alterações
+
+```bash
+git commit -m "Adicionando nova feature"
+```
+
+📄 Licença
+
+- Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais informações.
+
+📧 Contato
+
+- Desenvolvedor: **Julio Cesar Coutinho**
+- Contato: juliocesarcoutinho.dev@outlook.com
