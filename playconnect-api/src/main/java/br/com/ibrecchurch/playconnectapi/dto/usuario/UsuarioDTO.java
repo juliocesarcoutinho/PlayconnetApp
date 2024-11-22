@@ -1,5 +1,6 @@
 package br.com.ibrecchurch.playconnectapi.dto.usuario;
 
+import br.com.ibrecchurch.playconnectapi.entities.Endereco;
 import br.com.ibrecchurch.playconnectapi.entities.Role;
 import br.com.ibrecchurch.playconnectapi.entities.Usuario;
 import br.com.ibrecchurch.playconnectapi.util.DateUtils;
@@ -14,7 +15,8 @@ public record UsuarioDTO(
         String celular,
         String dataCadastro,
         String dataAtualizacao,
-        Set<RoleDTO> roles) {
+        Set<RoleDTO> roles,
+        Endereco endereco) {
 
     public UsuarioDTO(Usuario entity) {
         this(entity.getId(),
@@ -23,7 +25,8 @@ public record UsuarioDTO(
                 entity.getCelular(),
                 DateUtils.formatData(entity.getDataCadastro().toLocalDateTime()),
                 DateUtils.formatData(entity.getDataAlteracao().toLocalDateTime()),
-                entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()));
+                entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()),
+                entity.getEndereco());
     }
 
     public UsuarioDTO(Usuario entity, Set<Role> roles) {

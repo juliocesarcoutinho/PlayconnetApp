@@ -11,10 +11,10 @@ CREATE TABLE `role`
 CREATE TABLE usuario
 (
     id              BIGINT AUTO_INCREMENT NOT NULL,
-    nome            VARCHAR(255) NULL,
-    email           VARCHAR(255) NULL,
-    senha           VARCHAR(255) NULL,
-    celular         VARCHAR(255) NULL,
+    nome            VARCHAR(200) NOT NULL,
+    email           VARCHAR(160) NULL UNIQUE NOT NULL ,
+    senha           VARCHAR(255) NOT NULL,
+    celular         VARCHAR(14) DEFAULT NULL,
     data_nascimento date NULL,
     data_cadastro   TIMESTAMP NULL,
     data_alteracao  TIMESTAMP NULL,
