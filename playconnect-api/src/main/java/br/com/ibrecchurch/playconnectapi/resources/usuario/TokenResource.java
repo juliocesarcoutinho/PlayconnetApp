@@ -24,6 +24,7 @@ public class TokenResource {
     }
 
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS })
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         var response = authenticationService.authenticate(loginRequest);
         return ResponseEntity.ok(response);
