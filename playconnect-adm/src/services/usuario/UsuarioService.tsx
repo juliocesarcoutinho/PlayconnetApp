@@ -15,6 +15,15 @@ export interface Usuario {
     dataCadastro: string;
     dataAtualizacao: string;
     roles: { id: number; descricao: string; tipoUsuario: string }[];
+    endereco: {
+        cep: string;
+        logradouro: string;
+        numero: string;
+        complemento: string;
+        bairro: string;
+        cidade: string;
+        estado: string;
+    }
 }
 
 
@@ -59,6 +68,36 @@ export const UsuarioService = {
         } catch (error) {
             console.error('Erro ao buscar usuários:', error);
             throw new Error('Erro ao buscar usuários. Verifique sua conexão ou tente novamente.');
+        }
+    },
+
+    //Buscar usuário por ID
+    async getUsuarioById(id: number): Promise<Usuario | null> {
+        try {
+            const response = await api.get(`/usuarios/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar usuário:', error);
+            return null;
+        }
+    },
+
+    // editar usuario
+    async editUsuario(usuario: Usuario): Promise<{ success: boolean; message?: string }> {
+        try {
+            await api.put(`/usuarios/${usuario.id}`, usuario);
+            return {success: true};
+        } catch (error: any) {
+            console.error('Erro ao editar usuário:', error);
+            let errorMessage = 'Erro ao atualizar o usuário.';
+            if (error.response?.status === 400 && error.response?.data) {
+                const validationErrors = error.response.data;
+                errorMessage = Object.values(validationErrors).join(', ');
+            } else {
+                errorMessage = error.response?.data?.message || errorMessage;
+            }
+
+            return {success: false, message: errorMessage};
         }
     },
 };
