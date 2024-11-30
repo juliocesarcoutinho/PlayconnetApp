@@ -15,7 +15,7 @@ public record UsuarioCompletoDTO(
         @NotBlank(message = "O campo nome é obrigatório") String nome,
         @NotBlank(message = "O campo email é obrigatório") @ValidEmailDomain String email,
         @NotBlank String celular,
-        @NotBlank(message = "O campo senha é obrigatório") String senha,
+        String senha,
         Set<RoleDTO> roles,
         Endereco endereco) {
 

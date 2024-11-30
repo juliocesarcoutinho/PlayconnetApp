@@ -10,7 +10,7 @@ export default function DataTableUsuarios() {
     const [loading, setLoading] = useState<boolean>(true);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
-    const [perPage] = useState<number>(12);
+    const [perPage, setPerPage] = useState<number>(12);
     const [editarUsuarioDialog, setEditarUsuarioDialog] = useState<boolean>(false);
     const [usuarioEditar, setUsuarioEditar] = useState<Usuario | null>(null);
 
@@ -18,12 +18,9 @@ export default function DataTableUsuarios() {
         setLoading(true);
         try {
             const response = await UsuarioService.getUsuarios(pageNumber, perPage);
-            console.log('Dados recebidos:', response); // Log para depuração
-
-            // Popula os dados da tabela e total de registros
             if (response.content && Array.isArray(response.content)) {
-                setUsuarios(response.content); // Array de usuários
-                setTotalRows(response.totalElements); // Número total de registros
+                setUsuarios(response.content);
+                setTotalRows(response.totalElements);
             } else {
                 console.error('Formato inesperado da resposta:', response);
             }
@@ -34,17 +31,19 @@ export default function DataTableUsuarios() {
         }
     };
 
-    // Carregar usuários na mudança de página
     useEffect(() => {
         fetchUsuarios(page);
-    }, [page]);
+    }, [page, perPage]);
 
     const handlePageChange = (pageNumber: number) => {
         setPage(pageNumber - 1);
     };
 
+    const handlePerRowsChange = (newPerPage: number) => {
+        setPerPage(newPerPage);
+    };
+
     const handleEdit = async (usuario: Usuario) => {
-        // Lógica para editar o usuário
         if (usuario.id) {
             try {
                 const usuarioEncontrado = await UsuarioService.getUsuarioById(usuario.id);
@@ -59,14 +58,11 @@ export default function DataTableUsuarios() {
                 });
             }
         }
-        console.log("Editar usuário:", usuario);
     };
 
     const handleDelete = (usuario: Usuario) => {
-        // Lógica para deletar o usuário
         console.log("Deletar usuário:", usuario);
     };
-
 
     const handleSave = async (usuario: Usuario) => {
         try {
@@ -104,6 +100,13 @@ export default function DataTableUsuarios() {
         },
     ];
 
+    const paginationComponentOptions = {
+        rowsPerPageText: 'Registros por página:',
+        rangeSeparatorText: 'de',
+        selectAllRowsItem: true,
+        selectAllRowsItemText: 'Todos',
+    };
+
     return (
         <div className="w-full bg-white shadow-md rounded-lg p-4">
             <DataTable
@@ -116,6 +119,8 @@ export default function DataTableUsuarios() {
                 paginationTotalRows={totalRows}
                 paginationDefaultPage={page + 1}
                 onChangePage={handlePageChange}
+                onChangeRowsPerPage={handlePerRowsChange}
+                paginationComponentOptions={paginationComponentOptions}
                 highlightOnHover
                 pointerOnHover
                 noDataComponent="Nenhum usuário encontrado."
