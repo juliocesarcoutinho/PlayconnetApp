@@ -14,11 +14,11 @@ export default function LoginPage() {
       const response = await LoginService.login(email, senha);
       if (response.success) {
         toast.success("Login realizado com sucesso!");
-        router.push("/dashboard");
+        router.push("pages/dashboard");
       } else {
         toast.error(response.message || "Erro ao realizar login.");
       }
-    } catch (error) {
+    } catch {
       toast.error("Erro inesperado ao realizar login.");
     }
   };
@@ -40,10 +40,14 @@ export default function LoginPage() {
             </div>
             <div className="flex flex-col gap-4 p-6">
               <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm text-slate-600"
+                >
                   Email
                 </label>
                 <input
+                  id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
@@ -53,10 +57,14 @@ export default function LoginPage() {
               </div>
 
               <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
+                <label
+                  htmlFor="senha"
+                  className="block mb-2 text-sm text-slate-600"
+                >
                   Senha
                 </label>
                 <input
+                  id="senha"
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   type="password"
@@ -74,6 +82,7 @@ export default function LoginPage() {
                     type="checkbox"
                     className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
                     id="check-2"
+                    title="Lembre-me checkbox"
                   />
                   <span className="absolute text-white opacity-0 pointer-events-none peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <svg
@@ -83,12 +92,14 @@ export default function LoginPage() {
                       fill="currentColor"
                       stroke="currentColor"
                       strokeWidth="1"
+                      aria-label="Checked"
                     >
+                      <title>Checked</title>
                       <path
                         fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clipRule="evenodd"
-                      ></path>
+                      />
                     </svg>
                   </span>
                 </label>

@@ -1,7 +1,7 @@
 services:
   mysql:
     image: 'mysql:8.4'
-    container_name: mysql_playconnect
+    container_name: mysql_play
     environment:
       - 'MYSQL_DATABASE=playconnect_db'
       - 'MYSQL_PASSWORD=Topone147258#'

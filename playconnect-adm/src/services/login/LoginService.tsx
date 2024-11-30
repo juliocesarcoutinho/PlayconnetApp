@@ -13,7 +13,7 @@ export const LoginService = {
   async login(
     email: string,
     senha: string
-  ): Promise<{ success: boolean; data?: any; message?: string }> {
+  ): Promise<{ success: boolean; data?: unknown; message?: string }> {
     try {
       const response = await api.post("/login", { email, senha });
 
