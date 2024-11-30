@@ -10,6 +10,7 @@ interface EditarUsuarioDialogProps {
     onClose: () => void;
     usuario: Usuario | null;
     onSave: (usuario: Usuario) => void;
+    isEdit: boolean;
 }
 
 const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
@@ -17,6 +18,7 @@ const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
                                                                      onClose,
                                                                      usuario,
                                                                      onSave,
+                                                                     isEdit,
                                                                  }) => {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
@@ -33,6 +35,7 @@ const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
         estado: "",
     });
     const [roles, setRoles] = useState<{ id: number; descricao: string; tipoUsuario: string }[]>([]);
+    const [selectedRole, setSelectedRole] = useState<number | null>(null);
     const [apiErrorMessage, setApiErrorMessage] = useState("");
     const [validationErrors, setErrors] = useState({
         nome: false,
@@ -110,6 +113,16 @@ const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
         );
     };
 
+    // Busca Roles
+    useEffect(() => {
+        const fetchRoles = async () => {
+            const roles = await UsuarioService.getRoles();
+            setRoles(roles);
+        };
+
+        fetchRoles();
+    }, []);
+
     const handleEnderecoChange = (field: keyof typeof endereco, value: string) => {
         setEndereco((prevEndereco) => ({...prevEndereco, [field]: value}));
     };
@@ -149,7 +162,7 @@ const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
             <div className="flex items-center justify-center min-h-screen px-4">
                 <div className="fixed inset-0 bg-black opacity-30"></div>
                 <div className="relative bg-white rounded-lg max-w-4xl w-full mx-auto p-10 shadow-lg">
-                    <h2 className="text-lg font-semibold mb-4">Editar Usuário</h2>
+                    <h2 className="text-lg font-semibold mb-4">{isEdit ? "Editar Usuário" : "Novo Cadastro"}</h2>
                     <form>
                         <div className="grid gap-6 mb-6 lg:grid-cols-2">
                             <div>
@@ -229,6 +242,25 @@ const EditarUsuarioDialog: React.FC<EditarUsuarioDialogProps> = ({
                                             className={`w-5 h-5 ${senhaVisivel ? "text-blue-500" : "text-gray-500"}`}/>
                                     </button>
                                 </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="role"
+                                       className="block mb-2 text-sm font-medium text-gray-900">Tipo de usuario</label>
+                                <select
+                                    id="role"
+                                    value={selectedRole || ''}
+                                    onChange={(e) => setSelectedRole(Number(e.target.value))}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                >
+                                    <option value="" className="text-gray-500 ">Selecione um tipo de usuario
+                                    </option>
+                                    {roles.map((role) => (
+                                        <option key={role.id} value={role.id}>
+                                            {role.descricao}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900 mb-4">Endereço</h3>

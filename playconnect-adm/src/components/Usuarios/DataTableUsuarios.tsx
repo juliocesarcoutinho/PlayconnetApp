@@ -13,6 +13,7 @@ export default function DataTableUsuarios() {
     const [perPage, setPerPage] = useState<number>(12);
     const [editarUsuarioDialog, setEditarUsuarioDialog] = useState<boolean>(false);
     const [usuarioEditar, setUsuarioEditar] = useState<Usuario | null>(null);
+    const [novoCadastro, setNovoCadastro] = useState<boolean>(false);
 
     const fetchUsuarios = async (pageNumber: number = 0) => {
         setLoading(true);
@@ -64,22 +65,16 @@ export default function DataTableUsuarios() {
         console.log("Deletar usuário:", usuario);
     };
 
-    const handleSave = async (usuario: Usuario) => {
-        try {
-            await UsuarioService.editUsuario(usuario);
-            fetchUsuarios(page);
-        } catch (error) {
-            console.error("Erro ao atualizar usuário:", error);
-            toast.error("Erro ao atualizar usuário.");
-        }
-    }
-
     const columns = [
         {name: "Nome", selector: (row: Usuario) => row.nome, sortable: true},
         {name: "Email", selector: (row: Usuario) => row.email, sortable: true},
         {name: "Celular", selector: (row: Usuario) => row.celular || "Não informado", sortable: true},
         {name: "Data de Cadastro", selector: (row: Usuario) => row.dataCadastro, sortable: true},
-        {name: "Data de Atualização", selector: (row: Usuario) => row.dataAtualizacao, sortable: true},
+        {
+            name: "Tipo de Usuário",
+            selector: (row: Usuario) => row.roles.map(role => role.descricao).join(", "),
+            sortable: true
+        },
         {
             name: "Ações",
             cell: (row: Usuario) => (
@@ -107,8 +102,45 @@ export default function DataTableUsuarios() {
         selectAllRowsItemText: 'Todos',
     };
 
+    const handleSave = async (usuario: Usuario) => {
+        try {
+            await UsuarioService.createUsuario(usuario);
+            fetchUsuarios(page);
+        } catch (error) {
+            console.error("Erro ao criar usuário:", error);
+            toast.error("Erro ao criar usuário.");
+        }
+    };
+
     return (
         <div className="w-full bg-white shadow-md rounded-lg p-4">
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-xl font-semibold">Usuários</h1>
+                <button
+                    onClick={() => setNovoCadastro(true)}
+                    className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                    Novo Cadastro
+                </button>
+            </div>
+            {novoCadastro && (
+                <EditarUsuarioDialog
+                    isOpen={novoCadastro}
+                    onClose={() => setNovoCadastro(false)}
+                    usuario={null}
+                    onSave={handleSave}
+                    isEdit={false}
+                />
+            )}
+            {editarUsuarioDialog && (
+                <EditarUsuarioDialog
+                    isOpen={editarUsuarioDialog}
+                    onClose={() => setEditarUsuarioDialog(false)}
+                    usuario={usuarioEditar}
+                    onSave={handleEdit}
+                    isEdit={true}
+                />
+            )}
             <DataTable
                 title="Usuários"
                 columns={columns}
@@ -124,12 +156,6 @@ export default function DataTableUsuarios() {
                 highlightOnHover
                 pointerOnHover
                 noDataComponent="Nenhum usuário encontrado."
-            />
-            <EditarUsuarioDialog
-                isOpen={editarUsuarioDialog}
-                onClose={() => setEditarUsuarioDialog(false)}
-                usuario={usuarioEditar}
-                onSave={handleSave}
             />
         </div>
     );

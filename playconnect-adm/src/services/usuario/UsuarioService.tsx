@@ -83,6 +83,25 @@ export const UsuarioService = {
         }
     },
 
+    // criar usuário
+    async createUsuario(usuario: Usuario): Promise<{ success: boolean; message?: string }> {
+        try {
+            await api.post('/usuarios', usuario);
+            return {success: true};
+        } catch (error: any) {
+            console.error('Erro ao criar usuário:', error);
+            let errorMessage = 'Erro ao criar o usuário.';
+            if (error.response?.status === 400 && error.response?.data) {
+                const validationErrors = error.response.data;
+                errorMessage = Object.values(validationErrors).join(', ');
+            } else {
+                errorMessage = error.response?.data?.message || errorMessage;
+            }
+
+            return {success: false, message: errorMessage};
+        }
+    },
+
     // editar usuario
     async editUsuario(usuario: Usuario): Promise<{ success: boolean; message?: string }> {
         try {
@@ -101,5 +120,35 @@ export const UsuarioService = {
             return {success: false, message: errorMessage};
         }
     },
+
+    // deletar usuario
+    async deleteUsuario(id: number): Promise<{ success: boolean; message?: string }> {
+        try {
+            await api.delete(`/usuarios/${id}`);
+            return {success: true};
+        } catch (error: any) {
+            console.error('Erro ao deletar usuário:', error);
+            let errorMessage = 'Erro ao deletar o usuário.';
+            if (error.response?.status === 400 && error.response?.data) {
+                const validationErrors = error.response.data;
+                errorMessage = Object.values(validationErrors).join(', ');
+            } else {
+                errorMessage = error.response?.data?.message || errorMessage;
+            }
+
+            return {success: false, message: errorMessage};
+        }
+    },
+
+    // buscar roles
+    async getRoles(): Promise<Role[]> {
+        try {
+            const response = await api.get('/roles');
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar roles:', error);
+            return [];
+        }
+    }
 };
 
