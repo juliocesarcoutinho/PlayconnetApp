@@ -16,8 +16,7 @@ public record UsuarioCompletoDTO(
         @NotBlank(message = "O campo email é obrigatório") @ValidEmailDomain String email,
         @NotBlank String celular,
         String senha,
-        Set<RoleDTO> roles,
-        Endereco endereco) {
+        Set<RoleDTO> roles) {
 
     public UsuarioCompletoDTO(Usuario entity) {
         this(entity.getId(),
@@ -25,8 +24,7 @@ public record UsuarioCompletoDTO(
                 entity.getEmail(),
                 entity.getCelular(),
                 entity.getSenha(),
-                new HashSet<>(),
-                entity.getEndereco());
+                new HashSet<>());
     }
 
     public UsuarioCompletoDTO(Usuario entity, Set<Role> roles) {

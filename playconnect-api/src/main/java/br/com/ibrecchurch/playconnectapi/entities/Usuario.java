@@ -2,6 +2,7 @@ package br.com.ibrecchurch.playconnectapi.entities;
 
 import br.com.ibrecchurch.playconnectapi.dto.login.LoginRequest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,10 +40,10 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Column
-    private String celular;
+    private Boolean ativo;
 
-    @Embedded
-    private Endereco endereco;
+    @Column
+    private String celular;
 
     @Column(name = "data_nascimento")
     @Temporal(TemporalType.DATE)
@@ -101,7 +102,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.ativo;
     }
 }
 

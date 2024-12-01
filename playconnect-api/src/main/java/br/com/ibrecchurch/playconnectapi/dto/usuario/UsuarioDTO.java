@@ -15,8 +15,7 @@ public record UsuarioDTO(
         String celular,
         String dataCadastro,
         String dataAtualizacao,
-        Set<RoleDTO> roles,
-        Endereco endereco) {
+        Set<RoleDTO> roles) {
 
     public UsuarioDTO(Usuario entity) {
         this(entity.getId(),
@@ -25,8 +24,7 @@ public record UsuarioDTO(
                 entity.getCelular(),
                 DateUtils.formatData(entity.getDataCadastro().toLocalDateTime()),
                 DateUtils.formatData(entity.getDataAlteracao().toLocalDateTime()),
-                entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()),
-                entity.getEndereco());
+                entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()));
     }
 
     public UsuarioDTO(Usuario entity, Set<Role> roles) {

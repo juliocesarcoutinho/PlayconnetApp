@@ -14,17 +14,11 @@ CREATE TABLE usuario
     nome            VARCHAR(200) NOT NULL,
     email           VARCHAR(160) NULL UNIQUE NOT NULL ,
     senha           VARCHAR(255) NOT NULL,
+    ativo           BOOLEAN DEFAULT TRUE,
     celular         VARCHAR(14) DEFAULT NULL,
     data_nascimento date NULL,
     data_cadastro   TIMESTAMP NULL,
     data_alteracao  TIMESTAMP NULL,
-    cep             VARCHAR(8) NULL,
-    logradouro      VARCHAR(200) NULL,
-    numero          VARCHAR(10) NULL,
-    complemento     VARCHAR(200) NULL,
-    bairro          VARCHAR(200) NULL,
-    cidade          VARCHAR(200) NULL,
-    estado          VARCHAR(2) NULL,
     CONSTRAINT pk_usuario PRIMARY KEY (id)
 );
 
