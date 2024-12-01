@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import {Metadata} from 'next';
 import Layout from '../../layout/layout';
 import React from 'react';
 
@@ -8,7 +8,8 @@ interface AppLayoutProps {
 
 export const metadata: Metadata = {
     title: 'Play Connect - Painel de Controle',
-    robots: { index: false, follow: false },
+    description: 'Play Connect - Painel de Controle',
+    robots: {index: false, follow: false},
     openGraph: {
         type: 'website',
         title: 'Pet System TopOne',
@@ -25,6 +26,6 @@ export const viewport = {
     width: 'device-width'
 };
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function AppLayout({children}: AppLayoutProps) {
     return <Layout>{children}</Layout>;
 }
