@@ -99,14 +99,8 @@ const LoginPage = () => {
         <BlockUI blocked={isLoading} fullScreen>
             <div className={containerClassName}>
                 <div className="flex flex-column align-items-center justify-content-center">
-                    <div
-                        style={{
-                            borderRadius: '56px',
-                            padding: '0.3rem',
-                            background: 'linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)'
-                        }}
-                    >
-                        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{borderRadius: '53px'}}>
+                    <div>
+                        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{borderRadius: '10px'}}>
                             <div className="text-center mb-5">
                                 <h1 className="text-900 font-bold text-5xl mb-2">Play Connect</h1>
                                 <div className="text-900 text-3xl font-medium mb-3">Bem-vindo!</div>
