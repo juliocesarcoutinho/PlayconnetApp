@@ -1,16 +1,16 @@
 import Link from 'next/link';
-import { classNames } from 'primereact/utils';
-import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
-import { LayoutContext } from './context/layoutcontext';
-import { AppTopbarRef } from '../types';
-import { Button } from 'primereact/button';
-import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
-import { LoginService } from '../demo/services/usuario/LoginService';
-import { UsuarioService } from '../demo/services/usuario/UsuarioService';
+import {classNames} from 'primereact/utils';
+import React, {forwardRef, useContext, useImperativeHandle, useRef} from 'react';
+import {LayoutContext} from './context/layoutcontext';
+import {AppTopbarRef} from '../types';
+import {Button} from 'primereact/button';
+import {useRouter} from 'next/navigation';
+import {jwtDecode} from 'jwt-decode';
+import {LoginService} from '../demo/services/usuario/LoginService';
+import {UsuarioService} from '../demo/services/usuario/UsuarioService';
 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
-    const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar } = useContext(LayoutContext);
+    const {layoutConfig, layoutState, onMenuToggle, showProfileSidebar} = useContext(LayoutContext);
     const menubuttonRef = useRef<HTMLButtonElement>(null);
     const topbarmenuRef = useRef<HTMLDivElement>(null);
     const topbarmenubuttonRef = useRef<HTMLButtonElement>(null);
@@ -71,25 +71,24 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     return (
         <div className="layout-topbar">
             <Link href="/public" className="layout-topbar-logo">
-                <img src={`/layout/images/logo-${layoutConfig.colorScheme !== 'light' ? 'white' : 'dark'}.svg`}
-                     width="47.22px" height={'35px'} alt="logo" />
-                <span>Pet System TopOne</span>
+                <span>Play Connect </span>
             </Link>
 
             <button ref={menubuttonRef} type="button" className="p-link layout-menu-button layout-topbar-button"
                     onClick={onMenuToggle}>
-                <i className="pi pi-bars" />
+                <i className="pi pi-bars"/>
             </button>
 
             <button ref={topbarmenubuttonRef} type="button"
                     className="p-link layout-topbar-menu-button layout-topbar-button" onClick={showProfileSidebar}>
-                <i className="pi pi-ellipsis-v" />
+                <i className="pi pi-ellipsis-v"/>
             </button>
 
             <div ref={topbarmenuRef}
-                 className={classNames('layout-topbar-menu', { 'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible })}>
+                 className={classNames('layout-topbar-menu', {'layout-topbar-menu-mobile-active': layoutState.profileSidebarVisible})}>
 
-                <Button onClick={redirecionarParaOperador} rounded text severity="info" type="button" className="p-link layout-topbar-button">
+                <Button onClick={redirecionarParaOperador} rounded text severity="info" type="button"
+                        className="p-link layout-topbar-button">
                     <i className="pi pi-user"></i>
                     <span>Operador</span>
                 </Button>
