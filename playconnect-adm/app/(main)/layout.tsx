@@ -1,6 +1,7 @@
 import {Metadata} from 'next';
 import Layout from '../../layout/layout';
 import React from 'react';
+import '../globals.css'
 
 interface AppLayoutProps {
     children: React.ReactNode;

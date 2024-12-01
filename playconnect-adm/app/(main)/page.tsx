@@ -1,7 +1,8 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import {useRouter} from 'next/navigation';
+import React, {useEffect} from 'react';
 import Dashboard from './pages/dashboard/page';
+import '../globals.css'
 
 const PaginaInicial = () => {
     const router = useRouter();
@@ -25,7 +26,7 @@ const PaginaInicial = () => {
     };
 
     // Se o token for válido, renderiza o Dashboard
-    return <Dashboard />;
+    return <Dashboard/>;
 };
 
 export default PaginaInicial;

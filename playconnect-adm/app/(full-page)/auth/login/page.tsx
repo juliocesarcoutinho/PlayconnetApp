@@ -85,7 +85,7 @@ const LoginPage = () => {
                     life: 3000
                 });
             }
-        }).catch((error) => {
+        }).catch(() => {
             toast.current?.show({
                 severity: 'error',
                 summary: 'Erro',
@@ -115,7 +115,7 @@ const LoginPage = () => {
                                     id="email1"
                                     type="text"
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Endereço de email"
+                                    placeholder="Digite seu email"
                                     className="w-full md:w-30rem mb-5"
                                     style={{padding: '1rem'}}/>
 
@@ -126,17 +126,15 @@ const LoginPage = () => {
                                     inputId="password1"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Senha"
-                                    toggleMask
+                                    placeholder="Digite sua senha"
                                     className="w-full mb-5"
                                     inputClassName="w-full p-3 md:w-30rem"
                                     feedback={false}
                                 />
-
-
                                 <div className="text-center mb-5">
                                     <Link className="font-medium no-underline ml-2 text-right cursor-pointer"
-                                          style={{color: 'var(--primary-color)'}} onClick={() => setShowDialog(true)}
+                                          style={{color: 'var(--primary-color)'}}
+                                          onClick={() => setShowDialog(true)}
                                           href={''}>
                                         Esqueceu sua senha?
                                     </Link>

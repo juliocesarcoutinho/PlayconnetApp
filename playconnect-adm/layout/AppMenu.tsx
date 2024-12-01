@@ -48,7 +48,7 @@ const AppMenu = () => {
             label: '',
             icon: 'pi pi-fw pi-bookmark',
             items: [
-                {label: 'Usuário', icon: 'pi pi-fw pi-user', to: '/pages/cadastro/usuario'},
+                {label: 'Usuário', icon: 'pi pi-fw pi-user', to: '/pages/usuario'},
             ]
         },
     ];
