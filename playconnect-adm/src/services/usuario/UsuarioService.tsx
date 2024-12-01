@@ -15,7 +15,7 @@ export interface Usuario {
     celular: string | null;
     dataCadastro: string;
     dataAtualizacao: string;
-    roles: { id: number; descricao: string; tipoUsuario: string }[];
+    roles: { id: number; descricao: string; tipoUsuario: string }[] | null;
     endereco: {
         cep: string;
         logradouro: string;

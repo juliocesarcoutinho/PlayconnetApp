@@ -4,7 +4,6 @@ import SideBar from "@/components/sidebar/SideBar";
 import Header from "@/components/header/page";
 import Footer from "@/components/footer/Footer";
 import React from "react";
-import DataTableUsuarios from "@/components/Usuarios/DataTableUsuarios";
 import {FaUserFriends} from "react-icons/fa";
 
 export default function UsuariosPage() {
@@ -21,7 +20,7 @@ export default function UsuariosPage() {
                             Aqui você pode gerenciar todos os usuários do sistema.
                         </p>
                         {/* Renderiza apenas o componente da tabela */}
-                        <DataTableUsuarios/>
+
                     </div>
                 </div>
                 <Footer/>

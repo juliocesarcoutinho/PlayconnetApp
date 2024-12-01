@@ -5,6 +5,7 @@ import br.com.ibrecchurch.playconnectapi.config.PasswordGenerator;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.RoleDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioCompletoDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioDTO;
+import br.com.ibrecchurch.playconnectapi.entities.Role;
 import br.com.ibrecchurch.playconnectapi.entities.Usuario;
 import br.com.ibrecchurch.playconnectapi.repositories.RoleRepository;
 import br.com.ibrecchurch.playconnectapi.repositories.UsuarioRepository;
@@ -87,6 +88,7 @@ public class UsuarioService {
         return new UsuarioDTO(entity, entity.getRoles());
     }
 
+    //Atualizar usuário
     @Transactional
     public UsuarioDTO atualizar(Long id, UsuarioCompletoDTO dto) {
         Usuario usuario = repository.findById(id).orElseThrow(() ->
@@ -97,6 +99,7 @@ public class UsuarioService {
         usuario = repository.save(usuario);
         return new UsuarioDTO(usuario, usuario.getRoles());
     }
+
 
     @Transactional
     public void deletar(Long id) {
@@ -137,9 +140,12 @@ public class UsuarioService {
 
     private void copyDtoToEntity(UsuarioCompletoDTO dto, Usuario entity) {
         BeanUtils.copyProperties(dto, entity, "id", "roles", "senha");
+        if (entity.getRoles() == null) {
+            entity.setRoles(new HashSet<>());
+        }
         entity.getRoles().clear();
         for (RoleDTO roleDto : dto.roles()) {
-            var role = roleRepository.findById(roleDto.id())
+            Role role = roleRepository.findById(roleDto.id())
                     .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com ID: " + roleDto.id()));
             entity.getRoles().add(role);
         }
@@ -147,6 +153,7 @@ public class UsuarioService {
             entity.setSenha(passwordEncoder.encode(dto.senha()));
         }
     }
+
 
     private String gerarNovaSenha() {
         return PasswordGenerator.generateSecurePassword();
