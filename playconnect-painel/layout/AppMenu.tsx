@@ -27,7 +27,7 @@ const AppMenu = () => {
         {
             label: '',
             items: [
-                {label: 'Eventos', icon: 'pi pi-fw pi-calendar', to: '/pages/eventos'}
+                {label: 'Eventos', icon: 'pi pi-fw pi-calendar', to: '/pages/evento'}
             ]
         },
 
