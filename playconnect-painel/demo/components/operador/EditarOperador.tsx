@@ -103,10 +103,8 @@ const EditarOperador: React.FC<EditarOperadorProps> = ({visible, onHide, operado
                 ...(confirmEmail ? {email: confirmEmail} : {}),
                 ...(senha ? {senha: senha} : {}),
             };
-            console.log('Tentando editar o usuário:', updatedUsuario);
 
             const response = await UsuarioService.editUsuario(updatedUsuario);
-            console.log('Resposta da API:', response);
 
             if (response.success) {
                 toast.current?.show({
@@ -125,7 +123,6 @@ const EditarOperador: React.FC<EditarOperadorProps> = ({visible, onHide, operado
             }
 
         } catch (error: any) {
-            console.log("Erro capturado:", error);
 
             if (error.response) {
                 console.log("Erro resposta:", error.response);
@@ -148,7 +145,6 @@ const EditarOperador: React.FC<EditarOperadorProps> = ({visible, onHide, operado
                     });
                 }
             } else {
-                console.log("Erro sem resposta da API:", error.message);
                 toast.current?.show({
                     severity: 'error',
                     summary: 'Erro',
