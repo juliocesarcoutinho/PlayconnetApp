@@ -12,7 +12,6 @@ import {FilterMatchMode} from 'primereact/api';
 import UsuarioService from "@/demo/services/usuario/UsuarioService";
 import EditarUsuario from "@/demo/components/usuario/EditarUsuario";
 import DeletarUsuario from "@/demo/components/usuario/DeletarUsuario";
-import UsuarioDialog from "@/demo/components/usuario/UsuarioDialog";
 
 const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo.Usuario[], loading: boolean }) => {
     const [usuarios, setUsuarios] = useState<Demo.Usuario[]>([]);
@@ -157,44 +156,50 @@ const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo
                     selectionMode="single"
                 >
                     <Column field="id" header="Código" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {rowData.id}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column field="nome" header="Nome" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {rowData.nome}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column field="email" header="Email" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {rowData.email}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column field="celular" header="Celular" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {rowData.celular}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column field="descricao" header="Funções" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {formatRoles(rowData.roles)}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column field="ativo" header="Ativo" sortable body={(rowData: Demo.Usuario) => (
-                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                        <div onClick={() => visualizarUsuario(rowData)}
+                             style={{cursor: 'pointer', width: '100%', height: '100%'}}>
                             {statusBodyTemplate(rowData)}
-                        </span>
+                        </div>
                     )}></Column>
                     <Column body={actionBodyTemplate} header="Ações"/>
                 </DataTable>
 
                 {/* Componente para Visualizar Usuário */}
-                <UsuarioDialog
-                    usuario={usuarioVisualizar}
-                    visible={visualizarUsuarioDialog}
-                    onHide={() => setVisualizarUsuarioDialog(false)}
-                />
+                {/*<UsuarioDialog*/}
+                {/*    usuario={usuarioVisualizar}*/}
+                {/*    visible={visualizarUsuarioDialog}*/}
+                {/*    onHide={() => setVisualizarUsuarioDialog(false)}*/}
+                {/*/>*/}
 
                 {/* Componente para Editar Usuário */}
                 {usuarioEditar && (
