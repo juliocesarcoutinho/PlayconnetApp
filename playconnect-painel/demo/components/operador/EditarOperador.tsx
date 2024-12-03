@@ -115,6 +115,13 @@ const EditarOperador: React.FC<EditarOperadorProps> = ({visible, onHide, operado
                     detail: 'Operador atualizado com sucesso',
                     life: 3000,
                 });
+            } else {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: response.message || 'Erro inesperado ao atualizar cliente.',
+                    life: 5000,
+                });
             }
 
         } catch (error: any) {
@@ -181,7 +188,7 @@ const EditarOperador: React.FC<EditarOperadorProps> = ({visible, onHide, operado
 
                         <div className="field col-12 md:col-6">
                             <label htmlFor="celular">Celular</label>
-                            <InputText id="celular" value={usuario.celular}
+                            <InputText id="celular" value={usuario.celular || ''}
                                        onChange={(e) => onInputChange(e, 'celular')}/>
                         </div>
 
