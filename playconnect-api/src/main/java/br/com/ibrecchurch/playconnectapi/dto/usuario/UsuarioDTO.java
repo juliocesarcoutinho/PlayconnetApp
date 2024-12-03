@@ -13,6 +13,7 @@ public record UsuarioDTO(
         String nome,
         String email,
         String celular,
+        String ativo,
         String dataCadastro,
         String dataAtualizacao,
         Set<RoleDTO> roles) {
@@ -22,6 +23,7 @@ public record UsuarioDTO(
                 entity.getNome(),
                 entity.getEmail(),
                 entity.getCelular(),
+                entity.getAtivo() ? "Sim" : "Não",
                 DateUtils.formatData(entity.getDataCadastro().toLocalDateTime()),
                 DateUtils.formatData(entity.getDataAlteracao().toLocalDateTime()),
                 entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()));

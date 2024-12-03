@@ -42,6 +42,16 @@ public class AdminUserConfig implements CommandLineRunner {
             roleAdmin.setTipoUsuario(TipoUsuario.ADMINISTRADOR);
             roleAdmin = roleRepository.save(roleAdmin);
         }
+
+        // Verificar se o role USUARIO existe
+        var roleUsuario = roleRepository.findByDescricao(TipoUsuario.ADOLESCENTE.name());
+        if (roleUsuario == null) {
+            // Se não existir, cria e salva o role USUARIO
+            roleUsuario = new Role();
+            roleUsuario.setDescricao(TipoUsuario.ADOLESCENTE.name());
+            roleUsuario.setTipoUsuario(TipoUsuario.ADOLESCENTE);
+            roleUsuario = roleRepository.save(roleUsuario);
+        }
         
         Optional<Usuario> usuarioAdmin = usuarioRepository.findByEmail("playconnect@ibrecchurch.com.br");
 
@@ -54,6 +64,7 @@ public class AdminUserConfig implements CommandLineRunner {
                 usuario.setNome("Administrador");
                 usuario.setEmail("playconnect@ibrecchurch.com.br");
                 usuario.setSenha(passwordEncoder.encode("123456"));
+                usuario.setAtivo(true);
                 usuario.setRoles(Set.of(finalRoleAdmin));
                 usuarioRepository.save(usuario);
             }

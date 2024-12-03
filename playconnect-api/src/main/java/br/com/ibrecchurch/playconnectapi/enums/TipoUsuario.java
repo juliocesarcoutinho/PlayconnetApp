@@ -2,7 +2,7 @@ package br.com.ibrecchurch.playconnectapi.enums;
 
 public enum TipoUsuario {
     ADMINISTRADOR ("Administrador"),
-    USUARIO ("Usuário");
+    ADOLESCENTE("Adolescente");
 
     public static TipoUsuario fromString(String tipoUsuario) {
         for (TipoUsuario tipo : TipoUsuario.values()) {

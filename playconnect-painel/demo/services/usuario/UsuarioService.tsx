@@ -12,7 +12,7 @@ interface Usuario {
     nome: string;
     email: string;
     ativo: boolean;
-    telefone: string;
+    celular: string;
     dataCadastro: string;
     dataAtualizacao: string;
     roles: Role[];
@@ -58,7 +58,7 @@ export const UsuarioService = {
             return [];
         }
     },
-    
+
     // Método para deletar um usuário
     async deleteUsuario(id: number): Promise<boolean> {
         try {
@@ -74,7 +74,7 @@ export const UsuarioService = {
     async editUsuario(usuario: Usuario): Promise<{ success: boolean; message?: string }> {
         try {
             await api.put(`/usuarios/${usuario.id}`, usuario);
-            return { success: true };
+            return {success: true};
         } catch (error: any) {
             console.error('Erro ao editar usuário:', error);
             let errorMessage = 'Erro ao atualizar o usuário.';
@@ -85,15 +85,24 @@ export const UsuarioService = {
                 errorMessage = error.response?.data?.message || errorMessage;
             }
 
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     },
 
     // Método para criar um usuário
-    async createUsuario(usuario: Usuario): Promise<{ success: boolean; message?: string }> {
+    async createUsuario(usuario: {
+        senha: string;
+        celular: string;
+        ativo: boolean;
+        dataAtualizacao: string;
+        roles: { nome: string; id: number }[];
+        nome: string;
+        dataCadastro: string;
+        email: string
+    }): Promise<{ success: boolean; message?: string }> {
         try {
             await api.post('/usuarios', usuario);
-            return { success: true };
+            return {success: true};
         } catch (error: any) {
             console.error('Erro ao criar usuário:', error);
             let errorMessage = 'Erro ao salvar o usuário.';
@@ -103,7 +112,7 @@ export const UsuarioService = {
             } else {
                 errorMessage = error.response?.data?.message || errorMessage;
             }
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     },
 

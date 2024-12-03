@@ -13,7 +13,7 @@ declare namespace Demo {
         nome: string;
         email: string;
         ativo: boolean;
-        telefone: string;
+        celular: string;
         dataCadastro: string;
         dataAtualizacao: string;
         roles: {

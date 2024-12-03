@@ -45,10 +45,6 @@ public class Usuario implements UserDetails {
     @Column
     private String celular;
 
-    @Column(name = "data_nascimento")
-    @Temporal(TemporalType.DATE)
-    private LocalDate dataNascimento;
-
     @CreationTimestamp
     @Column(name = "data_cadastro", updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private ZonedDateTime dataCadastro;

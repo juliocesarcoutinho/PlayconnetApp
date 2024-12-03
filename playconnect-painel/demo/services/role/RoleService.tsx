@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../../config/config';
 import UsuarioService from '../usuario/UsuarioService';
-import { Demo } from '../../../types';
+import {Demo} from '../../../types';
 
 interface Role {
     id: number;
@@ -33,22 +33,26 @@ export const RoleService = {
     CHAVE_TOKEN: 'authToken',
 
 //Método para criar as roles.
-    async createRoles(role: Role): Promise<{ success: boolean; data?: any; message?: string }> {
+    async createRoles(role: { tipoUsuario: string | null; descricao: string }): Promise<{
+        success: boolean;
+        data?: any;
+        message?: string
+    }> {
         try {
             const response = await api.post('/roles', role);
-            return { success: true, data: response.data };
+            return {success: true, data: response.data};
         } catch (error: any) {
             let errorMessage = 'Erro ao salvar a função.';
-            
+
             if (error.response?.data) {
-                const { status, error: errorType, message } = error.response.data;
+                const {status, error: errorType, message} = error.response.data;
                 if (message) {
                     errorMessage = message;
                 } else if (errorType) {
                     errorMessage = errorType;
                 }
             }
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     },
 
@@ -104,7 +108,7 @@ export const RoleService = {
             } else {
                 errorMessage = error.response?.data?.message || errorMessage;
             }
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     },
 
@@ -112,7 +116,7 @@ export const RoleService = {
     async editRole(role: Role): Promise<{ success: boolean; message?: string }> {
         try {
             await api.put(`/roles/${role.id}`, role);
-            return { success: true };
+            return {success: true};
         } catch (error: any) {
             console.error('Erro ao editar função:', error);
             let errorMessage = 'Erro ao atualizar a função.';
@@ -123,7 +127,7 @@ export const RoleService = {
                 errorMessage = error.response?.data?.message || errorMessage;
             }
 
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     },
 
@@ -131,10 +135,10 @@ export const RoleService = {
     async deleteRole(id: number): Promise<{ success: boolean, message?: string }> {
         try {
             await api.delete(`/roles/${id}`);
-            return { success: true };
+            return {success: true};
         } catch (error) {
             console.error('Erro ao deletar a função:', error);
-            return { success: false, message: 'Erro ao excluir a função' };
+            return {success: false, message: 'Erro ao excluir a função'};
         }
     },
 

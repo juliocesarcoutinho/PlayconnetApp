@@ -14,9 +14,8 @@ CREATE TABLE usuario
     nome            VARCHAR(200) NOT NULL,
     email           VARCHAR(160) NULL UNIQUE NOT NULL ,
     senha           VARCHAR(255) NOT NULL,
-    ativo           BOOLEAN DEFAULT TRUE,
+    ativo           BOOLEAN NOT NULL,
     celular         VARCHAR(14) DEFAULT NULL,
-    data_nascimento date NULL,
     data_cadastro   TIMESTAMP NULL,
     data_alteracao  TIMESTAMP NULL,
     CONSTRAINT pk_usuario PRIMARY KEY (id)
