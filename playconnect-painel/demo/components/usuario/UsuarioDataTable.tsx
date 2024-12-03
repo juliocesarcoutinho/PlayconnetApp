@@ -12,6 +12,7 @@ import {FilterMatchMode} from 'primereact/api';
 import UsuarioService from "@/demo/services/usuario/UsuarioService";
 import EditarUsuario from "@/demo/components/usuario/EditarUsuario";
 import DeletarUsuario from "@/demo/components/usuario/DeletarUsuario";
+import UsuarioDialog from "@/demo/components/usuario/UsuarioDialog";
 
 const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo.Usuario[], loading: boolean }) => {
     const [usuarios, setUsuarios] = useState<Demo.Usuario[]>([]);
@@ -22,6 +23,8 @@ const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo
     const [editarUsuarioDialog, setEditarUsuarioDialog] = useState(false);
     const [deletUsuario, setDeletUsuario] = useState<Demo.Usuario | null>(null);
     const [deletarUsuarioDialog, setDeletarUsuarioDialog] = useState(false);
+    const [usuarioVisualizar, setUsuarioVisualizar] = useState<Demo.Usuario | null>(null);
+    const [visualizarUsuarioDialog, setVisualizarUsuarioDialog] = useState(false);
 
     useEffect(() => {
         setUsuarios(Array.isArray(initialUsuarios) ? initialUsuarios : []);
@@ -65,6 +68,11 @@ const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo
                 });
             }
         }
+    };
+
+    const visualizarUsuario = (usuario: Demo.Usuario) => {
+        setUsuarioVisualizar(usuario);
+        setVisualizarUsuarioDialog(true);
     };
 
     const actionBodyTemplate = (rowData: Demo.Usuario) => {
@@ -146,16 +154,47 @@ const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo
                     tableStyle={{minWidth: '50rem'}}
                     filters={filters}
                     header={header}
+                    selectionMode="single"
                 >
-                    <Column field="id" header="Código" sortable></Column>
-                    <Column field="nome" header="Nome" sortable></Column>
-                    <Column field="email" header="Email" sortable></Column>
-                    <Column field="celular" header="Celular" sortable></Column>
-                    <Column field="descricao" header="Funções" sortable
-                            body={(rowData: Demo.Usuario) => formatRoles(rowData.roles)}></Column>
-                    <Column field="ativo" header="Ativo" body={statusBodyTemplate} sortable></Column>
+                    <Column field="id" header="Código" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {rowData.id}
+                        </span>
+                    )}></Column>
+                    <Column field="nome" header="Nome" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {rowData.nome}
+                        </span>
+                    )}></Column>
+                    <Column field="email" header="Email" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {rowData.email}
+                        </span>
+                    )}></Column>
+                    <Column field="celular" header="Celular" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {rowData.celular}
+                        </span>
+                    )}></Column>
+                    <Column field="descricao" header="Funções" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {formatRoles(rowData.roles)}
+                        </span>
+                    )}></Column>
+                    <Column field="ativo" header="Ativo" sortable body={(rowData: Demo.Usuario) => (
+                        <span onClick={() => visualizarUsuario(rowData)} style={{cursor: 'pointer'}}>
+                            {statusBodyTemplate(rowData)}
+                        </span>
+                    )}></Column>
                     <Column body={actionBodyTemplate} header="Ações"/>
                 </DataTable>
+
+                {/* Componente para Visualizar Usuário */}
+                <UsuarioDialog
+                    usuario={usuarioVisualizar}
+                    visible={visualizarUsuarioDialog}
+                    onHide={() => setVisualizarUsuarioDialog(false)}
+                />
 
                 {/* Componente para Editar Usuário */}
                 {usuarioEditar && (
