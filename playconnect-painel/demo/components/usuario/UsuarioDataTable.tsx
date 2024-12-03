@@ -147,13 +147,13 @@ const UsuarioDataTable = ({usuarios: initialUsuarios, loading}: { usuarios: Demo
                     filters={filters}
                     header={header}
                 >
-                    <Column field="id" header="Código"></Column>
-                    <Column field="nome" header="Nome"></Column>
-                    <Column field="email" header="Email"></Column>
-                    <Column field="celular" header="Celular"></Column>
-                    <Column field="descricao" header="Funções"
+                    <Column field="id" header="Código" sortable></Column>
+                    <Column field="nome" header="Nome" sortable></Column>
+                    <Column field="email" header="Email" sortable></Column>
+                    <Column field="celular" header="Celular" sortable></Column>
+                    <Column field="descricao" header="Funções" sortable
                             body={(rowData: Demo.Usuario) => formatRoles(rowData.roles)}></Column>
-                    <Column field="ativo" header="Ativo" body={statusBodyTemplate}></Column>
+                    <Column field="ativo" header="Ativo" body={statusBodyTemplate} sortable></Column>
                     <Column body={actionBodyTemplate} header="Ações"/>
                 </DataTable>
 
