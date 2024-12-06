@@ -2,11 +2,15 @@ package br.com.ibrecchurch.playconnectapi.services.usuarios;
 
 import br.com.ibrecchurch.playconnectapi.config.EmailService;
 import br.com.ibrecchurch.playconnectapi.config.PasswordGenerator;
+import br.com.ibrecchurch.playconnectapi.dto.pessoa.PessoaDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.RoleDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioCompletoDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioDTO;
+import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioPessoaDTO;
+import br.com.ibrecchurch.playconnectapi.entities.Pessoa;
 import br.com.ibrecchurch.playconnectapi.entities.Role;
 import br.com.ibrecchurch.playconnectapi.entities.Usuario;
+import br.com.ibrecchurch.playconnectapi.repositories.PessoaRepository;
 import br.com.ibrecchurch.playconnectapi.repositories.RoleRepository;
 import br.com.ibrecchurch.playconnectapi.repositories.UsuarioRepository;
 import br.com.ibrecchurch.playconnectapi.services.exceptions.DataBaseException;
@@ -15,6 +19,7 @@ import br.com.ibrecchurch.playconnectapi.services.exceptions.ResourceNotFoundExc
 import br.com.ibrecchurch.playconnectapi.util.Capitalizer;
 import jakarta.mail.MessagingException;
 import jakarta.mail.SendFailedException;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -40,11 +45,18 @@ public class UsuarioService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
-    public UsuarioService(UsuarioRepository repository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
+    private final PessoaRepository pessoaRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository repository, RoleRepository roleRepository,
+                          BCryptPasswordEncoder passwordEncoder, EmailService emailService,
+                          PessoaRepository pessoaRepository, UsuarioRepository usuarioRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.pessoaRepository = pessoaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional(readOnly = true)
@@ -68,6 +80,12 @@ public class UsuarioService {
         Usuario entity = new Usuario();
         copyDtoToEntity(dto, entity);
         entity.setNome(Capitalizer.capitalizeWords(entity.getNome()));
+
+        if (entity.getAtivo() == null) {
+            entity.setAtivo(true);
+        } else {
+            entity.setAtivo(entity.getAtivo());
+        }
         entity = repository.save(entity);
 
         try {
@@ -96,10 +114,29 @@ public class UsuarioService {
         usuario.getRoles().clear();
         copyDtoToEntity(dto, usuario);
         usuario.setNome(Capitalizer.capitalizeWords(dto.nome()));
+        
+        if (usuario.getAtivo() == null) {
+            usuario.setAtivo(true);
+        } else {
+            usuario.setAtivo(usuario.getAtivo());
+        }
+        
         usuario = repository.save(usuario);
         return new UsuarioDTO(usuario, usuario.getRoles());
     }
 
+    //atualizar dados com a pessoa
+    @Transactional
+    public UsuarioPessoaDTO atualizarPessoa(Long id, PessoaDTO dto) {
+        Usuario usuario = repository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        var pessoa = getPessoa(dto, usuario);
+
+        usuario.setPessoa(pessoa);
+        usuarioRepository.save(usuario);
+        return new UsuarioPessoaDTO(usuario, dto);
+    }
 
     @Transactional
     public void deletar(Long id) {
@@ -153,6 +190,31 @@ public class UsuarioService {
             entity.setSenha(passwordEncoder.encode(dto.senha()));
         }
     }
+
+    private Pessoa getPessoa(PessoaDTO dto, Usuario usuario) {
+        // Se a pessoa já existe, recarregue ela da base de dados para garantir que o controle de versão seja mantido.
+        var pessoa = usuario.getPessoa();
+        if (pessoa == null) {
+            pessoa = new Pessoa();
+        } else {
+            // Recarregue a pessoa da base de dados para garantir que a versão esteja inicializada
+            pessoa = pessoaRepository.findById(pessoa.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Pessoa não encontrada"));
+        }
+
+        // Atualize os campos da pessoa
+        pessoa.setNome(usuario.getNome());
+        pessoa.setRg(dto.rg());
+        pessoa.setCpf(dto.cpf());
+        pessoa.setEndereco(dto.endereco());
+        pessoa.setNomePai(dto.nomePai());
+        pessoa.setNomeMae(dto.nomeMae());
+        pessoa.setDataNascimento(dto.dataNascimento());
+        
+        pessoaRepository.save(pessoa);
+        return pessoa;
+    }
+
 
 
     private String gerarNovaSenha() {

@@ -1,7 +1,9 @@
 package br.com.ibrecchurch.playconnectapi.resources.usuario;
 
+import br.com.ibrecchurch.playconnectapi.dto.pessoa.PessoaDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioCompletoDTO;
 import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioDTO;
+import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioPessoaDTO;
 import br.com.ibrecchurch.playconnectapi.services.usuarios.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -54,6 +56,15 @@ public class UsuarioResource {
                                                 @Valid UsuarioCompletoDTO dto) {
         UsuarioDTO novoDto = service.atualizar(id, dto);
         return ResponseEntity.ok().body(novoDto);
+    }
+    
+    //Atualizar usuario com a pessoa
+    @PutMapping(value = "/{id}/pessoa")
+    public ResponseEntity<UsuarioPessoaDTO> atualizarPessoa(@PathVariable("id") Long id,
+                                                            @RequestBody
+                                                            @Valid PessoaDTO dto) {
+        UsuarioPessoaDTO usuarioPessoaDTO = service.atualizarPessoa(id, dto);
+        return ResponseEntity.ok().body(usuarioPessoaDTO);
     }
     
     //Deletar usuário

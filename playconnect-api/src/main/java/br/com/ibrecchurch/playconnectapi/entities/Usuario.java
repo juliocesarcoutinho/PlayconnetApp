@@ -60,6 +60,10 @@ public class Usuario implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+    
+    @OneToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
