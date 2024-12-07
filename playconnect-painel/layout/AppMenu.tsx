@@ -19,6 +19,14 @@ const AppMenu = () => {
 
         {
             label: '',
+            icon: 'pi pi-fw pi-users',
+            items: [
+                {label: 'Adolescentes', icon: 'pi pi-fw pi-user', to: '/pages/adolescente'}
+            ]
+        },
+
+        {
+            label: '',
             items: [
                 {label: 'Mensagem', icon: 'pi pi-fw pi-book', to: '/pages/mensagem'}
             ]
@@ -42,7 +50,7 @@ const AppMenu = () => {
             label: '',
             icon: 'pi pi-fw pi-bookmark',
             items: [
-                {label: 'Usuário', icon: 'pi pi-fw pi-user', to: '/pages/usuario'}
+                {label: 'Usuários', icon: 'pi pi-fw pi-user', to: '/pages/usuario'}
             ]
         },
 

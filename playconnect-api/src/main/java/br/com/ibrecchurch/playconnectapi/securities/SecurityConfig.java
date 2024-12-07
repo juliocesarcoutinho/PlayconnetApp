@@ -59,6 +59,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/{id}").hasAnyAuthority("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.GET, "/api/v1/ceps/**").hasAnyAuthority("ADMINISTRADOR", "ADOLESCENTE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/pessoas/**").hasAnyAuthority("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/adolecentes").hasAnyAuthority("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/adolecentes/{id}").hasAnyAuthority("ADMINISTRADOR")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthenticationConverter())))

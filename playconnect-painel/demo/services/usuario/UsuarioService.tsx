@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../../config/config';
+import UsuarioPessoa = Demo.UsuarioPessoa;
 
 interface Role {
     id: number;
@@ -127,6 +128,39 @@ export const UsuarioService = {
             };
         } catch (error) {
             console.error('Erro ao buscar usuário por id:', error);
+            return null;
+        }
+    },
+
+    //Metodo que busca Usuario com dados da pessoa
+    async getUsuarioPessoa(page = 0, size = 12): Promise<UsuarioPessoa[]> {
+        try {
+            const response = await api.get(`/usuarios/adolecentes?page=${page}&size=${size}`);
+            const usuarios = response.data.content.map((usuario: Usuario) => ({
+                ...usuario,
+                ativo: typeof usuario.ativo === 'string' ? usuario.ativo === 'Sim' : usuario.ativo
+            }));
+
+
+            return usuarios;
+        } catch (error) {
+            console.error('Erro na API:', error);
+            return [];
+        }
+    },
+
+    // Método que busca Usuario com dados da pessoa por id
+    async getUsuarioPessoaById(id: number): Promise<UsuarioPessoa | null> {
+        try {
+            const response = await api.get(`/usuarios/adolecentes/${id}`);
+            const usuario = response.data;
+            console.log(usuario);
+            return {
+                ...usuario,
+                ativo: typeof usuario.ativo === 'string' ? usuario.ativo === 'Sim' : usuario.ativo
+            };
+        } catch (error) {
+            console.error('Erro ao buscar usuário pessoa por id:', error);
             return null;
         }
     },

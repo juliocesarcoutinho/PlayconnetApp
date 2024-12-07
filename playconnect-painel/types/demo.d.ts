@@ -23,36 +23,21 @@ declare namespace Demo {
         }[];
     }
 
-    export interface Pessoa {
-        id?: number;
+    export interface UsuarioPessoa {
+        id?: number | null;
         nome: string;
-        nomeRazao: string;
-        nomeFantasia: string;
         email: string;
-        cpf: string;
-        cnpj: string;
-        tipoPessoa: string;
-        rg: string;
-        estadoCivil: string;
-        dataNascimento: string;
-        sexo: string;
-        telefone: string;
-        celular: string
-        endereco?: {
-            complemento: string;
-            cep: string;
-            numero: string;
-            estado: string;
-            cidade: string;
-            bairro: string;
-            logradouro: string;
-        }
+        ativo: boolean;
+        celular: string;
         dataCadastro: string;
         dataAtualizacao: string;
-        razaoSocial: string;
-        inscricaoEstadual: string;
-        inscricaoMunicipal: string;
-        dataAbertura: string;
+        pessoa: {
+            endereco: {
+                logradouro: string;
+                numero: string;
+                cidade: string;
+            }
+        }
     }
 }
 

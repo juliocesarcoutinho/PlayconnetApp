@@ -18,6 +18,7 @@ import br.com.ibrecchurch.playconnectapi.services.exceptions.DataBaseException;
 import br.com.ibrecchurch.playconnectapi.services.exceptions.InvalidEmailException;
 import br.com.ibrecchurch.playconnectapi.services.exceptions.ResourceNotFoundException;
 import br.com.ibrecchurch.playconnectapi.util.Capitalizer;
+import br.com.ibrecchurch.playconnectapi.util.DateUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.SendFailedException;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +34,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -249,7 +251,7 @@ public class UsuarioService {
                         usuario.getEmail(),
                         usuario.getCelular(),
                         usuario.getAtivo() ? "Ativo" : "Inativo",
-                        usuario.getDataCadastro().toString(),
+                        DateUtils.formatData(usuario.getDataCadastro().toLocalDateTime()),
                         usuario.getDataAlteracao().toString(),
                         usuario.getPessoa() != null ? pessoaMapper.toDTO(usuario.getPessoa()) : null
                 ))
