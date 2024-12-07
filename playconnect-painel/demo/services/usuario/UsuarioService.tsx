@@ -164,6 +164,25 @@ export const UsuarioService = {
             return null;
         }
     },
+
+    // Metodo para editar um usuario pessoa
+    async editUsuarioPessoa(usuario: UsuarioPessoa): Promise<{ success: boolean; message?: string }> {
+        try {
+            await api.put(`/usuarios${usuario.id}/adolecente/`, usuario);
+            return {success: true};
+        } catch (error: any) {
+            console.error('Erro ao editar o cadasttro:', error);
+            let errorMessage = 'Erro ao atualizar o usuário.';
+            if (error.response?.status === 400 && error.response?.data) {
+                const validationErrors = error.response.data;
+                errorMessage = Object.values(validationErrors).join(', ');
+            } else {
+                errorMessage = error.response?.data?.message || errorMessage;
+            }
+
+            return {success: false, message: errorMessage};
+        }
+    },
 };
 
 export default UsuarioService;

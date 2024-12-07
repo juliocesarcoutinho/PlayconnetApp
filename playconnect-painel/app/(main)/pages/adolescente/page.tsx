@@ -68,7 +68,9 @@ const UsuarioPessoaDataTable = () => {
     };
 
     const saveUsuario = () => {
-        // Lógica para salvar o usuário editado
+        // Implementar método de salvar usuário
+
+
         hideDialog();
     };
 
