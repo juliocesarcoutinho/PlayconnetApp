@@ -168,7 +168,7 @@ export const UsuarioService = {
     // Metodo para editar um usuario pessoa
     async editUsuarioPessoa(usuario: UsuarioPessoa): Promise<{ success: boolean; message?: string }> {
         try {
-            await api.put(`/usuarios${usuario.id}/adolecente/`, usuario);
+            await api.put(`/usuarios/${usuario.id}/adolecente`, usuario);
             return {success: true};
         } catch (error: any) {
             console.error('Erro ao editar o cadasttro:', error);

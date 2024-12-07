@@ -6,12 +6,18 @@ import {Dialog} from 'primereact/dialog';
 import {InputText} from 'primereact/inputtext';
 import UsuarioService from "@/demo/services/usuario/UsuarioService";
 import {Button} from 'primereact/button';
+import {Toast} from 'primereact/toast';
 
 interface UsuarioPessoa {
     id: number;
+    cpf: string;
+    rg: string;
     nome: string;
     email: string;
     celular: string;
+    nascimento: string;
+    nomeMae: string;
+    nomePai: string;
     pessoa: {
         endereco: {
             logradouro: string;
@@ -27,6 +33,7 @@ const UsuarioPessoaDataTable = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedUsuario, setSelectedUsuario] = useState<UsuarioPessoa | null>(null);
     const [editDialogVisible, setEditDialogVisible] = useState<boolean>(false);
+    const toast = React.useRef<Toast>(null);
 
     useEffect(() => {
         const fetchUsuarios = async () => {
@@ -67,10 +74,26 @@ const UsuarioPessoaDataTable = () => {
         setSelectedUsuario(null);
     };
 
-    const saveUsuario = () => {
-        // Implementar método de salvar usuário
-
-
+    const saveUsuario = async () => {
+        if (selectedUsuario) {
+            try {
+                const response = await UsuarioService.editUsuarioPessoa(selectedUsuario);
+                if (response.success) {
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Sucesso',
+                        detail: 'Usuário atualizado com sucesso',
+                        life: 3000
+                    });
+                    setUsuarios(prevUsuarios => prevUsuarios.map(usuario => usuario.id === selectedUsuario.id ? selectedUsuario : usuario));
+                } else {
+                    toast.current?.show({severity: 'error', summary: 'Erro', detail: response.message, life: 3000});
+                }
+            } catch (error) {
+                console.error('Erro ao salvar usuário:', error);
+                toast.current?.show({severity: 'error', summary: 'Erro', detail: 'Erro ao salvar usuário', life: 3000});
+            }
+        }
         hideDialog();
     };
 
@@ -90,6 +113,7 @@ const UsuarioPessoaDataTable = () => {
 
     return (
         <div className="card">
+            <Toast ref={toast}/>
             <DataTable value={usuarios} responsiveLayout="scroll" loading={loading} paginator rows={5}
                        rowsPerPageOptions={[5, 10, 25]} dataKey="id" header={header}
                        emptyMessage="Nenhum adolescente encontrado">
