@@ -30,7 +30,7 @@ declare namespace Demo {
         nome: string;
         email: string;
         celular: string;
-        nascimento: string;
+        dataNascimento: string;
         nomeMae: string;
         nomePai: string;
         pessoa: {
