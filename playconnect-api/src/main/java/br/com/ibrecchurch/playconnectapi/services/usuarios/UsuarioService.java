@@ -10,6 +10,7 @@ import br.com.ibrecchurch.playconnectapi.dto.usuario.UsuarioPessoaDTO;
 import br.com.ibrecchurch.playconnectapi.entities.Pessoa;
 import br.com.ibrecchurch.playconnectapi.entities.Role;
 import br.com.ibrecchurch.playconnectapi.entities.Usuario;
+import br.com.ibrecchurch.playconnectapi.mappers.PessoaMappers;
 import br.com.ibrecchurch.playconnectapi.repositories.PessoaRepository;
 import br.com.ibrecchurch.playconnectapi.repositories.RoleRepository;
 import br.com.ibrecchurch.playconnectapi.repositories.UsuarioRepository;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -48,15 +50,19 @@ public class UsuarioService {
     private final PessoaRepository pessoaRepository;
     private final UsuarioRepository usuarioRepository;
 
+    private PessoaMappers pessoaMapper;
+
     public UsuarioService(UsuarioRepository repository, RoleRepository roleRepository,
                           BCryptPasswordEncoder passwordEncoder, EmailService emailService,
-                          PessoaRepository pessoaRepository, UsuarioRepository usuarioRepository) {
+                          PessoaRepository pessoaRepository, UsuarioRepository usuarioRepository,
+                          PessoaMappers pessoaMapper) {
         this.repository = repository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.pessoaRepository = pessoaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.pessoaMapper = pessoaMapper;
     }
 
     @Transactional(readOnly = true)
@@ -114,13 +120,13 @@ public class UsuarioService {
         usuario.getRoles().clear();
         copyDtoToEntity(dto, usuario);
         usuario.setNome(Capitalizer.capitalizeWords(dto.nome()));
-        
+
         if (usuario.getAtivo() == null) {
             usuario.setAtivo(true);
         } else {
             usuario.setAtivo(usuario.getAtivo());
         }
-        
+
         usuario = repository.save(usuario);
         return new UsuarioDTO(usuario, usuario.getRoles());
     }
@@ -210,14 +216,44 @@ public class UsuarioService {
         pessoa.setNomePai(dto.nomePai());
         pessoa.setNomeMae(dto.nomeMae());
         pessoa.setDataNascimento(dto.dataNascimento());
-        
+
         pessoaRepository.save(pessoa);
         return pessoa;
     }
 
+    @Transactional(readOnly = true)
+    public Page<UsuarioPessoaDTO> findAllWithPessoa(Pageable pageable) {
+        Page<Usuario> pagedResult = repository.findAll(pageable);
+        List<UsuarioPessoaDTO> usuarioPessoaDTOs = getUsuarioPessoaDTOS(pagedResult);
+        return new PageImpl<>(usuarioPessoaDTOs, pageable, pagedResult.getTotalElements());
+    }
 
+    // Busca Usuario com dados da pessoa por id
+    @Transactional(readOnly = true)
+    public UsuarioPessoaDTO findByIdWithPessoa(Long id) {
+        Usuario usuario = repository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+        PessoaDTO pessoaDTO = usuario.getPessoa() != null ? pessoaMapper.toDTO(usuario.getPessoa()) : null;
+        return new UsuarioPessoaDTO(usuario, pessoaDTO);
+    }
 
     private String gerarNovaSenha() {
         return PasswordGenerator.generateSecurePassword();
+    }
+
+    private List<UsuarioPessoaDTO> getUsuarioPessoaDTOS(Page<Usuario> pagedResult) {
+        List<UsuarioPessoaDTO> usuarioPessoaDTOs = pagedResult.stream()
+                .map(usuario -> new UsuarioPessoaDTO(
+                        usuario.getId(),
+                        usuario.getNome(),
+                        usuario.getEmail(),
+                        usuario.getCelular(),
+                        usuario.getAtivo() ? "Ativo" : "Inativo",
+                        usuario.getDataCadastro().toString(),
+                        usuario.getDataAlteracao().toString(),
+                        usuario.getPessoa() != null ? pessoaMapper.toDTO(usuario.getPessoa()) : null
+                ))
+                .collect(Collectors.toList());
+        return usuarioPessoaDTOs;
     }
 }

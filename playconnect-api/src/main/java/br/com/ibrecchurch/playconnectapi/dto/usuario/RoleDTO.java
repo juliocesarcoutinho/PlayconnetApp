@@ -3,6 +3,7 @@ package br.com.ibrecchurch.playconnectapi.dto.usuario;
 import br.com.ibrecchurch.playconnectapi.entities.Role;
 import br.com.ibrecchurch.playconnectapi.enums.TipoUsuario;
 import jakarta.validation.constraints.NotBlank;
+import lombok.NoArgsConstructor;
 
 public record RoleDTO(
         Long id, 

@@ -73,4 +73,18 @@ public class UsuarioResource {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    
+    // Buscar usuario com pessoa
+    @GetMapping(value = "/adolecentes")
+    public ResponseEntity<Page<UsuarioPessoaDTO>> findAllWithPessoa(Pageable pageable) {
+        Page<UsuarioPessoaDTO> page = service.findAllWithPessoa(pageable);
+        return ResponseEntity.ok(page);
+    }
+    
+    // Buscar usuario com pessoa por id
+    @GetMapping(value = "/adolecentes/{id}")
+    public ResponseEntity<UsuarioPessoaDTO> findByIdWithPessoa(@PathVariable("id") Long id) {
+        UsuarioPessoaDTO dto = service.findByIdWithPessoa(id);
+        return ResponseEntity.ok().body(dto);
+    }
 }
