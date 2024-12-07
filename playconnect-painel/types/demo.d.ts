@@ -36,6 +36,7 @@ declare namespace Demo {
                 logradouro: string;
                 numero: string;
                 cidade: string;
+                estado: string;
             }
         }
     }

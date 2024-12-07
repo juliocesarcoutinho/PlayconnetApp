@@ -35,7 +35,16 @@ const UsuarioPessoaDataTable = () => {
                 const fetchedUsuarios: Demo.UsuarioPessoa[] = await UsuarioService.getUsuarioPessoa();
                 const usuariosComId: UsuarioPessoa[] = fetchedUsuarios.map(usuario => ({
                     ...usuario,
-                    id: usuario.id ?? 0
+                    id: usuario.id ?? 0,
+                    pessoa: {
+                        ...usuario.pessoa,
+                        endereco: {
+                            logradouro: usuario.pessoa?.endereco?.logradouro ?? '',
+                            numero: usuario.pessoa?.endereco?.numero ?? '',
+                            cidade: usuario.pessoa?.endereco?.cidade ?? '',
+                            estado: usuario.pessoa?.endereco?.estado ?? ''
+                        }
+                    }
                 }));
                 setUsuarios(usuariosComId);
             } catch (error) {
@@ -80,7 +89,8 @@ const UsuarioPessoaDataTable = () => {
     return (
         <div className="card">
             <DataTable value={usuarios} responsiveLayout="scroll" loading={loading} paginator rows={5}
-                       rowsPerPageOptions={[5, 10, 25]} dataKey="id" header={header}>
+                       rowsPerPageOptions={[5, 10, 25]} dataKey="id" header={header}
+                       emptyMessage="Nenhum adolescente encontrado">
                 <Column field="id" header="Código" sortable body={(rowData) => (
                     <div onClick={() => onCellClick(rowData)} style={{cursor: 'pointer'}}>
                         {rowData.id}
