@@ -209,21 +209,45 @@ const UsuarioPessoaDataTable = () => {
 
                         <div className="field col-12 md:col-6">
                             <label htmlFor="cpf">CPF</label>
-                            <InputMask mask="999.999.999-99" id="cpf" value={selectedUsuario.cpf}
-                                       onChange={(e) => setSelectedUsuario({...selectedUsuario, cpf: e.target.value})}/>
+                            <InputMask
+                                mask="999.999.999-99"
+                                id="cpf"
+                                value={selectedUsuario?.cpf ?? ""}
+                                onChange={(e) =>
+                                    setSelectedUsuario(prev => ({
+                                        ...(prev as UsuarioPessoa),
+                                        cpf: e.target.value as string
+                                    }))
+                                }
+                            />
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="rg">RG</label>
-                            <InputMask mask="99.999.999-9" id="rg" value={selectedUsuario.rg}
-                                       onChange={(e) => setSelectedUsuario({...selectedUsuario, rg: e.target.value})}/>
+                            <InputMask
+                                mask="99.999.999-9"
+                                id="rg"
+                                value={selectedUsuario?.rg ?? ""}
+                                onChange={(e) =>
+                                    setSelectedUsuario(prev => ({
+                                        ...(prev as UsuarioPessoa),
+                                        rg: e.target.value as string
+                                    }))
+                                }
+                            />
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="celular">Celular</label>
-                            <InputText id="celular" value={selectedUsuario.celular}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           celular: e.target.value
-                                       })}/>
+                            <InputMask
+                                mask="(99)99999-9999"
+                                id="celular"
+                                value={selectedUsuario?.celular ?? ""}
+                                onChange={(e) =>
+                                    setSelectedUsuario(prev => ({
+                                        ...(prev as UsuarioPessoa),
+                                        celular: e.target.value as string
+                                    }))
+                                }
+                            />
                         </div>
 
                         <div className="field col-12 md:col-6">
