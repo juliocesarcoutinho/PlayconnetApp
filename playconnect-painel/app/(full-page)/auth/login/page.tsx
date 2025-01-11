@@ -18,9 +18,9 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [showDialog, setShowDialog] = useState(false);
     const [email, setEmail] = useState('');
-    const { layoutConfig } = useContext(LayoutContext);
+    const {layoutConfig} = useContext(LayoutContext);
     const router = useRouter();
-    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', { 'p-input-filled': layoutConfig.inputStyle === 'filled' });
+    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden', {'p-input-filled': layoutConfig.inputStyle === 'filled'});
     const toast = useRef<Toast>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -67,41 +67,41 @@ const LoginPage = () => {
 
     const dialogFooter = (
         <div className="flex justify-content-center">
-            <Button label="Enviar" severity="info" text raised onClick={recoveryPassword} />
-            <Button label="Cancelar" severity="danger" text raised onClick={() => setShowDialog(false)} />
+            <Button label="Enviar" severity="info" text raised onClick={recoveryPassword}/>
+            <Button label="Cancelar" severity="danger" text raised onClick={() => setShowDialog(false)}/>
         </div>
     );
 
     const login = async () => {
-    LoginService.login(email, password).then((response) => {
-        if (response.success) {
-            router.push('../pages/dashboard'); // Redirect to the main page
-        } else {
+        LoginService.login(email, password).then((response) => {
+            if (response.success) {
+                router.push('../pages/dashboard');
+            } else {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: response.message,
+                    life: 3000
+                });
+            }
+        }).catch((error) => {
             toast.current?.show({
                 severity: 'error',
                 summary: 'Erro',
-                detail: response.message,
+                detail: 'Erro inesperado',
                 life: 3000
             });
-        }
-    }).catch((error) => {
-        toast.current?.show({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro inesperado',
-            life: 3000
         });
-    });
-};
+    };
 
     return (
         <BlockUI blocked={isLoading} fullScreen>
             <div className={containerClassName}>
                 <div className="flex flex-column align-items-center justify-content-center">
                     <div>
-                        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{ borderRadius: '10px' }}>
+                        <div className="w-full surface-card py-8 px-5 sm:px-8" style={{borderRadius: '10px'}}>
                             <div className="text-center mb-5">
-                                <h1 className="text-900 font-bold text-5xl mb-2">Play Connect</h1>
+                                <h1 className="text-900 font-bold text-5xl mb-2">Church System</h1>
                                 <div className="text-900 text-3xl font-medium mb-3">Bem-vindo!</div>
                                 <span className="text-600 font-medium">Faça login para continuar</span>
                             </div>
@@ -116,7 +116,7 @@ const LoginPage = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Endereço de email"
                                     className="w-full md:w-30rem mb-5"
-                                    style={{ padding: '1rem' }} />
+                                    style={{padding: '1rem'}}/>
 
                                 <label htmlFor="password1" className="block text-900 font-medium text-xl mb-2">
                                     Senha
@@ -133,7 +133,7 @@ const LoginPage = () => {
 
                                 <div className="text-center mb-5">
                                     <a className="font-medium no-underline ml-2 text-right cursor-pointer"
-                                       style={{ color: 'var(--primary-color)' }} onClick={() => setShowDialog(true)}>
+                                       style={{color: 'var(--primary-color)'}} onClick={() => setShowDialog(true)}>
                                         Esqueceu sua senha?
                                     </a>
                                 </div>
@@ -144,21 +144,22 @@ const LoginPage = () => {
                     </div>
                 </div>
 
-                <Dialog header="Recuperar Senha" visible={showDialog} style={{ width: '450px' }} footer={dialogFooter}
+                <Dialog header="Recuperar Senha" visible={showDialog} style={{width: '450px'}} footer={dialogFooter}
                         onHide={() => setShowDialog(false)}>
                     <div className="p-fluid">
                         <div className="field">
                             <label htmlFor="email" className="block text-900 text-xl font-medium mb-2">Email</label>
                             <InputText id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email"
-                                       placeholder="Digite seu email" className="w-full" style={{ padding: '1rem' }} />
+                                       placeholder="Digite seu email" className="w-full" style={{padding: '1rem'}}/>
                         </div>
                     </div>
                 </Dialog>
-                <Toast ref={toast} position="top-right" />
+                <Toast ref={toast} position="top-right"/>
             </div>
             {isLoading && (
-                <div className="flex align-items-center justify-content-center" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10000 }}>
-                    <ProgressSpinner />
+                <div className="flex align-items-center justify-content-center"
+                     style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10000}}>
+                    <ProgressSpinner/>
                 </div>
             )}
         </BlockUI>

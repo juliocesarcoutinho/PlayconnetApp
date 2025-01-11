@@ -25,17 +25,19 @@ declare namespace Demo {
 
     export interface UsuarioPessoa {
         id?: number | null;
-        cpf: string;
-        rg: string;
         nome: string;
         email: string;
         celular: string;
-        dataNascimento: string;
-        nomeMae: string;
-        nomePai: string;
         pessoa: {
+            cpf: string;
+            rg: string;
+            nomeMae: string;
+            nomePai: string;
+            dataNascimento: string;
             endereco: {
+                cep: string;
                 logradouro: string;
+                complemento: string;
                 numero: string;
                 cidade: string;
                 estado: string;

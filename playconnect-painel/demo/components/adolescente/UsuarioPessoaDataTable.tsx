@@ -13,17 +13,19 @@ import UsuarioService from '@/demo/services/usuario/UsuarioService';
 
 interface UsuarioPessoa {
     id: number;
-    cpf: string;
-    rg: string;
     nome: string;
     email: string;
     celular: string;
-    dataNascimento: string;
-    nomeMae: string;
-    nomePai: string;
     pessoa: {
+        cpf: string;
+        rg: string;
+        nomeMae: string;
+        nomePai: string;
+        dataNascimento: string;
         endereco: {
+            cep: string;
             logradouro: string;
+            complemento: string;
             numero: string;
             cidade: string;
             estado: string;
@@ -60,13 +62,16 @@ const UsuarioPessoaDataTable = () => {
             setLoading(true);
             try {
                 const fetchedUsuarios: Demo.UsuarioPessoa[] = await UsuarioService.getUsuarioPessoa();
+                console.log(fetchedUsuarios)
                 const usuariosComId: UsuarioPessoa[] = fetchedUsuarios.map(usuario => ({
                     ...usuario,
                     id: usuario.id ?? 0,
                     pessoa: {
                         ...usuario.pessoa,
                         endereco: {
+                            cep: usuario.pessoa?.endereco?.cep ?? '',
                             logradouro: usuario.pessoa?.endereco?.logradouro ?? '',
+                            complemento: usuario.pessoa?.endereco?.complemento ?? '',
                             numero: usuario.pessoa?.endereco?.numero ?? '',
                             cidade: usuario.pessoa?.endereco?.cidade ?? '',
                             estado: usuario.pessoa?.endereco?.estado ?? ''
@@ -176,16 +181,7 @@ const UsuarioPessoaDataTable = () => {
                         {rowData.pessoa?.endereco?.numero}
                     </div>
                 )}/>
-                <Column field="pessoa?.endereco?.cidade" header="Cidade" sortable body={(rowData) => (
-                    <div onClick={() => onCellClick(rowData)} style={{cursor: 'pointer'}}>
-                        {rowData.pessoa?.endereco?.cidade}
-                    </div>
-                )}/>
-                <Column field="pessoa?.endereco?.estado" header="Estado" sortable body={(rowData) => (
-                    <div onClick={() => onCellClick(rowData)} style={{cursor: 'pointer'}}>
-                        {rowData.pessoa?.endereco?.estado}
-                    </div>
-                )}/>
+                
             </DataTable>
 
             <Dialog visible={editDialogVisible} style={{width: '600px'}} header="Editar Usuário" modal
@@ -212,7 +208,7 @@ const UsuarioPessoaDataTable = () => {
                             <InputMask
                                 mask="999.999.999-99"
                                 id="cpf"
-                                value={selectedUsuario?.cpf ?? ""}
+                                value={selectedUsuario?.pessoa.cpf ?? ""}
                                 onChange={(e) =>
                                     setSelectedUsuario(prev => ({
                                         ...(prev as UsuarioPessoa),
@@ -226,7 +222,7 @@ const UsuarioPessoaDataTable = () => {
                             <InputMask
                                 mask="99.999.999-9"
                                 id="rg"
-                                value={selectedUsuario?.rg ?? ""}
+                                value={selectedUsuario?.pessoa.rg ?? ""}
                                 onChange={(e) =>
                                     setSelectedUsuario(prev => ({
                                         ...(prev as UsuarioPessoa),
@@ -252,28 +248,65 @@ const UsuarioPessoaDataTable = () => {
 
                         <div className="field col-12 md:col-6">
                             <label htmlFor="nascimento">Data de Nascimento</label>
-                            <Calendar id="nascimento" value={parseDate(selectedUsuario.dataNascimento)}
-                                      onChange={(e) => setSelectedUsuario({
-                                          ...selectedUsuario,
-                                          dataNascimento: e.value?.toISOString() || ''
-                                      })} dateFormat="dd/mm/yy" locale="pt-BR"/>
+                            <Calendar
+                                id="nascimento"
+                                value={parseDate(selectedUsuario?.pessoa?.dataNascimento || '')}
+                                onChange={(e) => setSelectedUsuario({
+                                    ...selectedUsuario,
+                                    pessoa: {
+                                        ...selectedUsuario?.pessoa,
+                                        dataNascimento: e.value?.toISOString() || ''
+                                    }
+                                })}
+                                dateFormat="dd/mm/yy"
+                                locale="pt-BR"
+                            />
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="nomeMae">Nome da Mãe</label>
-                            <InputText id="nomeMae" value={selectedUsuario.nomeMae}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           nomeMae: e.target.value
-                                       })}/>
+                            <InputText
+                                id="nomeMae"
+                                value={selectedUsuario?.pessoa?.nomeMae || ''}
+                                onChange={(e) => setSelectedUsuario({
+                                    ...selectedUsuario,
+                                    pessoa: {
+                                        ...selectedUsuario?.pessoa,
+                                        nomeMae: e.target.value
+                                    }
+                                })}
+                            />
                         </div>
+
                         <div className="field col-12 md:col-6">
                             <label htmlFor="nomePai">Nome do Pai</label>
-                            <InputText id="nomePai" value={selectedUsuario.nomePai}
+                            <InputText
+                                id="nomePai"
+                                value={selectedUsuario?.pessoa?.nomePai || ''}
+                                onChange={(e) => setSelectedUsuario({
+                                    ...selectedUsuario,
+                                    pessoa: {
+                                        ...selectedUsuario?.pessoa,
+                                        nomePai: e.target.value
+                                    }
+                                })}
+                            />
+                        </div>
+
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="logradouro">Cep</label>
+                            <InputText id="logradouro" value={selectedUsuario.pessoa?.endereco?.cep}
                                        onChange={(e) => setSelectedUsuario({
                                            ...selectedUsuario,
-                                           nomePai: e.target.value
+                                           pessoa: {
+                                               ...selectedUsuario.pessoa,
+                                               endereco: {
+                                                   ...selectedUsuario.pessoa.endereco,
+                                                   logradouro: e.target.value
+                                               }
+                                           }
                                        })}/>
                         </div>
+
                         <div className="field col-12 md:col-6">
                             <label htmlFor="logradouro">Logradouro</label>
                             <InputText id="logradouro" value={selectedUsuario.pessoa?.endereco?.logradouro}
@@ -290,6 +323,18 @@ const UsuarioPessoaDataTable = () => {
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="numero">Número</label>
+                            <InputText id="numero" value={selectedUsuario.pessoa?.endereco?.numero}
+                                       onChange={(e) => setSelectedUsuario({
+                                           ...selectedUsuario,
+                                           pessoa: {
+                                               ...selectedUsuario.pessoa,
+                                               endereco: {...selectedUsuario.pessoa.endereco, numero: e.target.value}
+                                           }
+                                       })}/>
+                        </div>
+
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="numero">Complemento</label>
                             <InputText id="numero" value={selectedUsuario.pessoa?.endereco?.numero}
                                        onChange={(e) => setSelectedUsuario({
                                            ...selectedUsuario,

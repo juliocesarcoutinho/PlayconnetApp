@@ -16,8 +16,8 @@ public class MailConfig {
         mailSender.setHost("smtp.titan.email");
         mailSender.setPort(465);
 
-        mailSender.setUsername("contato@toponewebdevelopers.com.br");
-        mailSender.setPassword("TopOne147258#");
+        mailSender.setUsername("contato@toponesystem.com.br");
+        mailSender.setPassword("Topone147258#");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

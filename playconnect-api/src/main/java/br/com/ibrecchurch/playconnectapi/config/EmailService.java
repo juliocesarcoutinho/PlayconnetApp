@@ -34,7 +34,7 @@ public class EmailService {
             String htmlContent = templateEngine.process("email_acesso", context);
 
             helper.setTo(to);
-            helper.setFrom("contato@toponewebdevelopers.com.br");
+            helper.setFrom("contato@toponesystem.com.br");
             helper.setSubject("Bem-vindo ao Play Connect App");
             helper.setText(htmlContent, true);
 
@@ -64,7 +64,7 @@ public class EmailService {
             String htmlContent = templateEngine.process("recuperacao_email_acesso", context);
 
             helper.setTo(to);
-            helper.setFrom("contato@toponewebdevelopers.com.br");
+            helper.setFrom("contato@toponesystem.com.br");
             helper.setSubject("Recuperação de Senha - Play Connect App");
             helper.setText(htmlContent, true);
 
