@@ -169,6 +169,7 @@ export const UsuarioService = {
     async editUsuarioPessoa(usuario: UsuarioPessoa): Promise<{ success: boolean; message?: string }> {
         try {
             await api.put(`/usuarios/${usuario.id}/adolecente`, usuario);
+            console.log(usuario)
             return {success: true};
         } catch (error: any) {
             console.error('Erro ao editar o cadasttro:', error);

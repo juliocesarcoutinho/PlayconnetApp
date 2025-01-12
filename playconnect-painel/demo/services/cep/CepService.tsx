@@ -3,10 +3,10 @@ import config from '../../config/config';
 
 interface Cep {
     cep: string;
-    localidade: string;
+    cidade: string;
     bairro: string;
     logradouro: string;
-    uf: string;
+    estado: string;
     complemento: string;
 }
 
@@ -36,10 +36,10 @@ export const CepService = {
     async getEnderecoByCep(cep: string): Promise<{ success: boolean; data?: Cep | null; message?: string }> {
         try {
             const response = await api.get<Cep>(`/ceps/${cep}`);
-            return { success: true, data: response.data };
+            return {success: true, data: response.data};
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || 'Erro ao buscar endereço.';
-            return { success: false, message: errorMessage };
+            return {success: false, message: errorMessage};
         }
     }
 };

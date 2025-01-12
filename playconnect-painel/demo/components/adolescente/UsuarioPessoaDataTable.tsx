@@ -10,7 +10,21 @@ import {Calendar} from 'primereact/calendar';
 import {InputMask} from 'primereact/inputmask';
 import {addLocale} from 'primereact/api';
 import UsuarioService from '@/demo/services/usuario/UsuarioService';
+import {CepService} from "@/demo/services/cep/CepService";
 
+// Interface para o endereço
+interface Endereco {
+    cep: string | null;
+    logradouro: string | null;
+    complemento: string | null;
+    numero: string | null;
+    bairro: string | null;
+    cidade: string | null;
+    estado: string | null;
+}
+
+
+// Interface para a pessoa, sem o endereço embutido
 interface UsuarioPessoa {
     id: number;
     nome: string;
@@ -22,16 +36,9 @@ interface UsuarioPessoa {
         nomeMae: string;
         nomePai: string;
         dataNascimento: string;
-        endereco: {
-            cep: string;
-            logradouro: string;
-            complemento: string;
-            numero: string;
-            cidade: string;
-            estado: string;
-        }
-    }
+    };
 }
+
 
 const UsuarioPessoaDataTable = () => {
     const [usuarios, setUsuarios] = useState<UsuarioPessoa[]>([]);
@@ -39,6 +46,18 @@ const UsuarioPessoaDataTable = () => {
     const [selectedUsuario, setSelectedUsuario] = useState<UsuarioPessoa | null>(null);
     const [editDialogVisible, setEditDialogVisible] = useState<boolean>(false);
     const toast = React.useRef<Toast>(null);
+
+
+    const [endereco, setEndereco] = useState<Endereco>({
+        cep: '',
+        logradouro: '',
+        complemento: '',
+        numero: '',
+        bairro: '',
+        cidade: '',
+        estado: ''
+    });
+
 
     // Adiciona a localidade para o português do Brasil
     addLocale('pt-BR', {
@@ -62,7 +81,6 @@ const UsuarioPessoaDataTable = () => {
             setLoading(true);
             try {
                 const fetchedUsuarios: Demo.UsuarioPessoa[] = await UsuarioService.getUsuarioPessoa();
-                console.log(fetchedUsuarios)
                 const usuariosComId: UsuarioPessoa[] = fetchedUsuarios.map(usuario => ({
                     ...usuario,
                     id: usuario.id ?? 0,
@@ -88,6 +106,49 @@ const UsuarioPessoaDataTable = () => {
 
         fetchUsuarios();
     }, []);
+
+    const handleBuscarCep = async (cepComMascara: string) => {
+        const cep = cepComMascara.replace(/[^0-9]/g, '');
+
+        if (cep.length === 8) {
+            try {
+                const response = await CepService.getEnderecoByCep(cep);
+                if (response.success && response.data) {
+                    setEndereco((prev) => ({
+                        ...prev,
+                        logradouro: response.data?.logradouro || '',
+                        complemento: response.data?.complemento || '',
+                        bairro: response.data?.bairro || '',
+                        cidade: response.data?.cidade || '',
+                        estado: response.data?.estado || ''
+                    }));
+                } else {
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Erro',
+                        detail: response.message || 'CEP não encontrado.',
+                        life: 3000
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao buscar o CEP:', error);
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: 'Erro ao buscar o CEP.',
+                    life: 3000
+                });
+            }
+        } else {
+            toast.current?.show({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Digite um CEP válido com 8 dígitos.',
+                life: 3000
+            });
+        }
+    };
+
 
     const onCellClick = (usuario: UsuarioPessoa) => {
         setSelectedUsuario(usuario);
@@ -181,7 +242,7 @@ const UsuarioPessoaDataTable = () => {
                         {rowData.pessoa?.endereco?.numero}
                     </div>
                 )}/>
-                
+
             </DataTable>
 
             <Dialog visible={editDialogVisible} style={{width: '600px'}} header="Editar Usuário" modal
@@ -293,79 +354,71 @@ const UsuarioPessoaDataTable = () => {
                         </div>
 
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="logradouro">Cep</label>
-                            <InputText id="logradouro" value={selectedUsuario.pessoa?.endereco?.cep}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {
-                                                   ...selectedUsuario.pessoa.endereco,
-                                                   logradouro: e.target.value
-                                               }
-                                           }
-                                       })}/>
+                            <label htmlFor="cep">CEP</label>
+                            <InputMask
+                                mask="99999-999"
+                                id="cep"
+                                value={endereco.cep || ''}
+                                onChange={(e) =>
+                                    setEndereco((prev) => ({
+                                        ...prev,
+                                        cep: e.target.value || ''
+                                    }))
+                                }
+                                onBlur={(e) => handleBuscarCep(e.target.value)}
+                            />
                         </div>
 
                         <div className="field col-12 md:col-6">
                             <label htmlFor="logradouro">Logradouro</label>
-                            <InputText id="logradouro" value={selectedUsuario.pessoa?.endereco?.logradouro}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {
-                                                   ...selectedUsuario.pessoa.endereco,
-                                                   logradouro: e.target.value
-                                               }
-                                           }
-                                       })}/>
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="numero">Número</label>
-                            <InputText id="numero" value={selectedUsuario.pessoa?.endereco?.numero}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {...selectedUsuario.pessoa.endereco, numero: e.target.value}
-                                           }
-                                       })}/>
+                            <InputText
+                                id="logradouro"
+                                value={endereco.logradouro || ''}
+                                onChange={(e) =>
+                                    setEndereco((prev) => ({
+                                        ...prev,
+                                        logradouro: e.target.value || ''
+                                    }))
+                                }
+                            />
                         </div>
 
                         <div className="field col-12 md:col-6">
-                            <label htmlFor="numero">Complemento</label>
-                            <InputText id="numero" value={selectedUsuario.pessoa?.endereco?.numero}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {...selectedUsuario.pessoa.endereco, numero: e.target.value}
-                                           }
-                                       })}/>
+                            <label htmlFor="bairro">Bairro</label>
+                            <InputText
+                                id="bairro"
+                                value={endereco.bairro}
+                                onChange={(e) => setEndereco((prev) => ({
+                                    ...prev,
+                                    bairro: e.target.value
+                                }))}
+                            />
                         </div>
+
                         <div className="field col-12 md:col-6">
                             <label htmlFor="cidade">Cidade</label>
-                            <InputText id="cidade" value={selectedUsuario.pessoa?.endereco?.cidade}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {...selectedUsuario.pessoa.endereco, cidade: e.target.value}
-                                           }
-                                       })}/>
+                            <InputText
+                                id="cidade"
+                                value={endereco.cidade}
+                                onChange={(e) => setEndereco((prev) => ({
+                                    ...prev,
+                                    cidade: e.target.value
+                                }))}
+                            />
                         </div>
+
                         <div className="field col-12 md:col-6">
                             <label htmlFor="estado">Estado</label>
-                            <InputText id="estado" value={selectedUsuario.pessoa?.endereco?.estado}
-                                       onChange={(e) => setSelectedUsuario({
-                                           ...selectedUsuario,
-                                           pessoa: {
-                                               ...selectedUsuario.pessoa,
-                                               endereco: {...selectedUsuario.pessoa.endereco, estado: e.target.value}
-                                           }
-                                       })}/>
+                            <InputText
+                                id="estado"
+                                value={endereco.estado}
+                                onChange={(e) => setEndereco((prev) => ({
+                                    ...prev,
+                                    estado: e.target.value
+                                }))}
+                            />
                         </div>
+
                     </div>
                 )}
             </Dialog>
