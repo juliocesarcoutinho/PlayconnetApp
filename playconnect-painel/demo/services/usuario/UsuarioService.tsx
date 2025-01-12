@@ -168,12 +168,15 @@ export const UsuarioService = {
     // Metodo para editar um usuario pessoa
     async editUsuarioPessoa(usuario: UsuarioPessoa): Promise<{ success: boolean; message?: string }> {
         try {
-            await api.put(`/usuarios/${usuario.id}/adolecente`, usuario);
-            console.log(usuario)
+            // Extrai o objeto "pessoa" e envia ao endpoint
+            const {pessoa} = usuario;
+            await api.put(`/usuarios/${usuario.id}/adolescente`, pessoa);
+
             return {success: true};
         } catch (error: any) {
-            console.error('Erro ao editar o cadasttro:', error);
+            console.error('Erro ao editar o cadastro:', error);
             let errorMessage = 'Erro ao atualizar o usuário.';
+
             if (error.response?.status === 400 && error.response?.data) {
                 const validationErrors = error.response.data;
                 errorMessage = Object.values(validationErrors).join(', ');
@@ -183,7 +186,7 @@ export const UsuarioService = {
 
             return {success: false, message: errorMessage};
         }
-    },
-};
+    }
+}
 
 export default UsuarioService;

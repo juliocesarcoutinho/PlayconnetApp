@@ -45,13 +45,14 @@ public class CepService {
 
                     String ultimaAtualizacao = rootNode.path("updated").asText();
                     String codigoCep = rootNode.path("code").asText();
+                    String logradouro = rootNode.path("street").asText();
                     long codigoMunicipio = rootNode.path("municipality").asLong();
                     String numero = rootNode.path("number").asText();
                     String bairro = rootNode.path("district").asText();
                     String cidade = rootNode.path("city").asText();
                     String estado = rootNode.path("state").asText();
 
-                    return new CepDTO(ultimaAtualizacao, codigoCep, codigoMunicipio, numero, bairro, cidade, estado);
+                    return new CepDTO(ultimaAtualizacao, codigoCep, logradouro, codigoMunicipio, numero, bairro, cidade, estado);
                 } else {
                     throw new RuntimeException("Erro desconhecido ao consultar o CEP.");
                 }

@@ -95,7 +95,9 @@ const UsuarioPessoaDataTable = () => {
                             estado: usuario.pessoa?.endereco?.estado ?? ''
                         }
                     }
+
                 }));
+                console;
                 setUsuarios(usuariosComId);
             } catch (error) {
                 console.error('Erro ao buscar usuários:', error);
@@ -171,6 +173,7 @@ const UsuarioPessoaDataTable = () => {
                         detail: 'Usuário atualizado com sucesso',
                         life: 3000
                     });
+                    console.log(selectedUsuario)
                     setUsuarios(prevUsuarios => prevUsuarios.map(usuario => usuario.id === selectedUsuario.id ? selectedUsuario : usuario));
                 } else {
                     toast.current?.show({severity: 'error', summary: 'Erro', detail: response.message, life: 3000});
