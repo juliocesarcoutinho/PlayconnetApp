@@ -17,7 +17,7 @@ CREATE TABLE pessoa
     data_nascimento  DATE NULL,
     nome_pai         VARCHAR(255) NULL,
     nome_mae         VARCHAR(255) NULL,
-    cep              VARCHAR(8) NULL,
+    cep              VARCHAR(9) NULL,
     logradouro       VARCHAR(200) NULL,
     numero           VARCHAR(10) NULL,
     complemento      VARCHAR(200) NULL,

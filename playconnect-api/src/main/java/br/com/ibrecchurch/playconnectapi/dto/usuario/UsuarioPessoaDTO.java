@@ -3,6 +3,7 @@ package br.com.ibrecchurch.playconnectapi.dto.usuario;
 import br.com.ibrecchurch.playconnectapi.dto.pessoa.PessoaDTO;
 import br.com.ibrecchurch.playconnectapi.entities.Pessoa;
 import br.com.ibrecchurch.playconnectapi.entities.Usuario;
+import jakarta.validation.Valid;
 
 import java.util.Set;
 
@@ -14,7 +15,7 @@ public record UsuarioPessoaDTO(
         String ativo,
         String dataCadastro,
         String dataAtualizacao,
-        PessoaDTO pessoa
+        @Valid PessoaDTO pessoa
 ) {
     public UsuarioPessoaDTO(UsuarioDTO usuarioDTO, PessoaDTO pessoaDTO) {
         this(usuarioDTO.id(),

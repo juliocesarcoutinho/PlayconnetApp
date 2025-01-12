@@ -59,7 +59,7 @@ public class UsuarioResource {
     }
     
     //Atualizar usuario com a pessoa
-    @PutMapping(value = "/{id}/adolecente")
+    @PutMapping(value = "/{id}/adolescente")
     public ResponseEntity<UsuarioPessoaDTO> atualizarPessoa(@PathVariable("id") Long id,
                                                             @RequestBody
                                                             @Valid PessoaDTO dto) {
